@@ -1,0 +1,36 @@
+{
+  "name": "job-portal",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "inferno": "^9.0.3",
+    "inferno-scripts": "8.0.20",
+    "web-vitals": "^3.5.2"
+  },
+  "scripts": {
+    "start": "inferno-scripts start",
+    "build": "inferno-scripts build",
+    "test": "inferno-scripts test",
+    "eject": "inferno-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:inferno/recommended"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not ie <= 11"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
