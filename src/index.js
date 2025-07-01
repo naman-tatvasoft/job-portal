@@ -2,6 +2,7 @@ import { render } from 'inferno';
 import './index.css';
 import App from './App.js';
 import reportWebVitals from './reportWebVitals.js';
+import 'bootstrap/dist/css/bootstrap.css';
 
 render(<App />, document.getElementById('root'));
 
