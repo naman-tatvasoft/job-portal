@@ -7,4 +7,5 @@ export const routes = [
   <Route key="login" path="/" component={Login} exact />,
   <Route key="employer" path="/employer-register" component={RegisterEmployer} />,
   <Route key="candidate" path="/candidate-register" component={RegisterCandidate} />,
+  <Route key="admin-dashboard" path="/admin-dashboard" component={() => <div>Admin Dashboard</div>} />,
 ];

@@ -21,7 +21,14 @@ export async function login(data) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).then(_verifyResponse).catch(_handleError);
+  }).then(_verifyResponse).catch(_handleError) ;
+}
+
+export async function testToken(token) {
+  return fetch(`${API_BASE}/auth/test/token?token=${token}`, {
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }).then(_verifyResponse).catch(_handleError) ;
 }
 
 // function _post(url, data) {
@@ -43,7 +50,8 @@ export async function login(data) {
 //   return headers;
 // }
 
-function _verifyResponse(res) {
+async function _verifyResponse(res) {
+  let data = await res.json();
   const contentType = res.headers.get('content-type');
 
   if (res.status === 401) {
@@ -52,20 +60,19 @@ function _verifyResponse(res) {
     return;
   }
 
-  if (!res.ok) {
-    return res.text().then((msg) => {
-      throw new Error(msg || 'Request failed');
-    });
+  if (!res.ok && res.status != 201) {
+    console.log("in error call from apiServices");
+    _handleError(data);
   }
-
+  
   if (contentType && contentType.includes('application/json')) {
-    return res.json();
+    console.log('Response is JSON', data);
+    return data;
   } else {
     throw new Error('Response was not JSON');
   }
 }
 
 function _handleError(error) {
-  console.error('An API error occurred:', error.message || error);
-  throw error;
+  return error;
 }

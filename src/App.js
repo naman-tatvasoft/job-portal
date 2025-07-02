@@ -1,4 +1,5 @@
 import { Component } from 'inferno';
+import './App.css'
 import { BrowserRouter } from 'inferno-router';
 import { routes } from './routes.js';
 
@@ -7,7 +8,6 @@ export default class App extends Component {
     return (
       <BrowserRouter>
         <div>
-          <h1>Job Portal</h1>
           {routes}
         </div>
       </BrowserRouter>
