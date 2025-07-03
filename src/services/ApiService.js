@@ -31,6 +31,15 @@ export async function testToken(token) {
   }).then(_verifyResponse).catch(_handleError) ;
 }
 
+
+export async function getAdminDashboardData(){
+  return fetch(`${API_BASE}/dashboard/admin`, {
+    method: 'GET',
+    headers: _authHeaders(),
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+
 // function _post(url, data) {
 //   return fetch(url, {
 //     method: 'POST',
@@ -39,16 +48,16 @@ export async function testToken(token) {
 //   }).then(_verifyResponse).catch(_handleError);
 // }
 
-// function _authHeaders() {
-//   const token = localStorage.getItem('token');
-//   const headers = {
-//     'Content-Type': 'application/json',
-//   };
-//   if (token) {
-//     headers['Authorization'] = `Bearer ${token}`;
-//   }
-//   return headers;
-// }
+function _authHeaders() {
+  const token = localStorage.getItem('token');
+  const headers = {
+    'Content-Type': 'application/json',
+  };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+  return headers;
+}
 
 async function _verifyResponse(res) {
   let data = await res.json();

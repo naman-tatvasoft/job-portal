@@ -32,7 +32,7 @@ export default class Login extends Component {
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('role');
-      }
+      } 
     } else {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
