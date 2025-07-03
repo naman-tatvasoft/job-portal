@@ -13,14 +13,7 @@ export default class RegisterCandidate extends Component {
     this.handleInput = this.handleInput.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentDidMount() {
-    console.log('RegisterCandidate component mounted!');
-  }
-
-  componentWillUnmount() {
-    console.log('RegisterCandidate component is being destroyed');
-  }
-
+  
   handleInput = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   }

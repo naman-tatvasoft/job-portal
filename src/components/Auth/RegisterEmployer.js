@@ -14,12 +14,7 @@ export default class RegisterEmployer extends Component {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentDidMount() {
-    console.log('RegisterEmployer component mounted!');
-  }
-  componentWillUnmount() {
-    console.log('RegisterEmployer component is being destroyed');
-  }
+  
   handleInput = (e) => {
     this.setState({ [e.target.name]: e.target.value });
   };

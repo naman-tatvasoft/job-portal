@@ -17,7 +17,7 @@ export default class Login extends Component {
 
     async componentWillMount() {
         const adminData = await getAdminDashboardData();
-        
+
         if (adminData) {
             this.setState({
                 totalEmployers: adminData.totalEmployers,
@@ -31,12 +31,21 @@ export default class Login extends Component {
     }
 
     render() {
-        const { totalEmployers, totalJobs, totalCandidates, totalApplications, latestJobs } = this.state;
+        const { totalEmployers, totalJobs, totalCandidates, totalApplications, latestJobs, latestApplications } = this.state;
 
         return (
             <div id="dashboard" class="page-section">
                 <h1>Job Portal</h1>
                 <h2>Admin Dashboard</h2>
+                <div className="sidebar">
+                    <ul>
+                        <li><a href="/admin-dashboard">Dashboard</a></li>
+                        <li><a href="/admin-manage-candidates">Users</a></li>
+                        <li><a href="/jobs">Jobs</a></li>
+                        <li><a href="/applications">Applications</a></li>
+                        <li><a >logout</a></li>
+                    </ul>
+                </div>
                 <div class="dashboard-stats">
                     <div className="stat-item">
                         <h3>Total Employers</h3>
@@ -68,7 +77,7 @@ export default class Login extends Component {
                     <div className="stat-item">
                         <h3>Latest Applications</h3>
                         <ul>
-                            {this.state.latestApplications.length > 0 ? this.state.latestApplications.map(application => (
+                            {latestApplications.length > 0 ? latestApplications.map(application => (
                                 <li key={application.id}>
                                     <strong>{application.jobTitle}</strong> at {application.companyName} by {application.candidateName}
                                     <p>Status: {application.status}</p>

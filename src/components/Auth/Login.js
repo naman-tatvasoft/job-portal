@@ -15,13 +15,18 @@ export default class Login extends Component {
   }
 
   async componentWillMount() {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('access-token');
     const role = localStorage.getItem('role');
 
     if (token != null && role != null) {
       const res = await testToken(token);
 
       if (res && (res.data.data.role == role)) {
+        
+        if (res.data.data.token) {
+          localStorage.setItem('access-token', res.data.data.token);
+        }
+
         if (role == 'Employer') {
           window.location.href = '/employer-dashboard';
         } else if (role == 'Candidate') {
@@ -29,12 +34,13 @@ export default class Login extends Component {
         } else if (role == 'Admin') {
           window.location.href = '/admin-dashboard';
         }
+
       } else {
-        localStorage.removeItem('token');
+        localStorage.removeItem('access-token');
         localStorage.removeItem('role');
-      } 
+      }
     } else {
-      localStorage.removeItem('token');
+      localStorage.removeItem('access-token');
       localStorage.removeItem('role');
     }
   }
@@ -64,9 +70,13 @@ export default class Login extends Component {
         return;
       }
 
+      if(res.data.refreshToken) {
+        document.cookie = `refresh-token=${res.data.refreshToken}; path=/; secure; samesite=strict`;
+      }
+
       const role = res.data.role;
 
-      localStorage.setItem('token', res.data.token);
+      localStorage.setItem('access-token', res.data.token);
       localStorage.setItem('role', res.data.role);
 
       if (role == 'Employer') {

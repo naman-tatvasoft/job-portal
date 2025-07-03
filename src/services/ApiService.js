@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:5246/api'; 
+const API_BASE = 'http://localhost:5246/api';
 
 export async function registerEmployer(data) {
   return fetch(`${API_BASE}/auth/employer`, {
@@ -21,18 +21,18 @@ export async function login(data) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(data),
-  }).then(_verifyResponse).catch(_handleError) ;
+  }).then(_verifyResponse).catch(_handleError);
 }
 
 export async function testToken(token) {
   return fetch(`${API_BASE}/auth/test/token?token=${token}`, {
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' }
-  }).then(_verifyResponse).catch(_handleError) ;
+    headers: _authHeaders(),
+  }).then(_verifyResponse).catch(_handleError);
 }
 
 
-export async function getAdminDashboardData(){
+export async function getAdminDashboardData() {
   return fetch(`${API_BASE}/dashboard/admin`, {
     method: 'GET',
     headers: _authHeaders(),
@@ -49,12 +49,20 @@ export async function getAdminDashboardData(){
 // }
 
 function _authHeaders() {
-  const token = localStorage.getItem('token');
+
+  const token = localStorage.getItem('access-token');
   const headers = {
     'Content-Type': 'application/json',
   };
+  
+  const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh-token='));
+  if (refreshToken) {
+    headers['refresh-Token'] = refreshToken.split('=')[1];
+  }
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
+
   }
   return headers;
 }
@@ -62,7 +70,7 @@ function _authHeaders() {
 async function _verifyResponse(res) {
   let data = await res.json();
   const contentType = res.headers.get('content-type');
-
+  console.log('Response status:', res.status);
   if (res.status === 401) {
     localStorage.removeItem('token');
     window.location.href = '/';
@@ -73,7 +81,7 @@ async function _verifyResponse(res) {
     console.log("in error call from apiServices");
     _handleError(data);
   }
-  
+
   if (contentType && contentType.includes('application/json')) {
     console.log('Response is JSON', data);
     return data;
