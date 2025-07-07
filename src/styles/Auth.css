@@ -1,0 +1,46 @@
+
+.auth-section {
+    background: linear-gradient(to right, #0062E6, #33AEFF);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  #login .auth-container {
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+  
+  .auth-card {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0px 5px 25px rgba(0, 0, 0, 0.15);
+    padding: 30px;
+  }
+  
+  .auth-header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .auth-header h2 {
+    color: #0062E6;
+    font-weight: bold;
+  }
+  
+  .auth-links {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .auth-links p {
+    margin-bottom: 5px;
+  }
+  
+  .auth-links a {
+    color: #0062E6;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .auth-links a:hover {
+    text-decoration: underline;
+  }

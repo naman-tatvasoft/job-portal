@@ -1,5 +1,6 @@
 import { Component } from 'inferno';
 import { login, testToken } from '../../services/ApiService.js';
+import '../../styles/Auth.css';
 
 export default class Login extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ export default class Login extends Component {
       const res = await testToken(token);
 
       if (res && (res.data.data.role == role)) {
-        
+
         if (res.data.data.token) {
           localStorage.setItem('access-token', res.data.data.token);
         }
@@ -70,7 +71,7 @@ export default class Login extends Component {
         return;
       }
 
-      if(res.data.refreshToken) {
+      if (res.data.refreshToken) {
         document.cookie = `refresh-token=${res.data.refreshToken}; path=/; secure; samesite=strict`;
       }
 
@@ -100,38 +101,47 @@ export default class Login extends Component {
 
     return (
 
-      <div id="login" class="page-section">
+      <div id="login" class="auth-section container-fluid">
+        <div class="d-flex align-items-center row justify-content-center vh-100">
+          <div class="col-lg-6 d-none d-lg-block">
+            <div class="h-100">
+              <img src="/assets/images/job-hunt.svg" class="img-fluid" alt="Job Portal Illustration" />
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-8">
+            <div class="auth-container">
+              <div class="container-fluid">
+                <div class="row justify-content-center">
+                  <div class="col-lg-8 col-md-10">
+                    <div class="auth-card">
+                      <div class="auth-header">
+                        <h1>Job Portal</h1>
+                        <h2><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
+                        <p>Sign in to your account</p>
+                      </div>
+                      <div class="auth-body">
+                        <form id="loginForm" onSubmit={this.handleSubmit}>
+                         
+                          <div class="form-floating mb-3">
+                            <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="email" value={email} onInput={this.handleInput} />
+                            <label for="loginEmail"><i class="fas fa-envelope me-2"></i>Email address</label>
+                          </div>
+                          <div class="form-floating mb-3">
+                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" value={password} onInput={this.handleInput} />
+                            <label for="loginPassword"><i class="fas fa-lock me-2"></i>Password</label>
+                          </div>
+                          <div>
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
+                          </div>
+                          <button type="submit" class="btn btn-primary w-100 m-1">
+                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                          </button>
+                        </form>
 
-        <h1>Job Portal</h1>
-        <div class="auth-container">
-          <div class="container">
-            <div class="row justify-content-center">
-              <div class="col-lg-5 col-md-7">
-                <div class="auth-card">
-                  <div class="auth-header">
-                    <h2><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
-                    <p>Sign in to your account</p>
-                  </div>
-                  <div class="auth-body">
-                    <form id="loginForm" onSubmit={this.handleSubmit}>
-                      <div class="form-floating">
-                        <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="email" value={email} onInput={this.handleInput} />
-                        <label for="loginEmail"><i class="fas fa-envelope me-2"></i>Email address</label>
+                        <div class="auth-links">
+                          <p>Don`t have an account?</p> <p><a href="/candidate-register">Sign up here as candidate</a></p><p><a href="/employer-register">Sign up here as employer</a></p>
+                        </div>
                       </div>
-                      <div class="form-floating">
-                        <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" value={password} onInput={this.handleInput} />
-                        <label for="loginPassword"><i class="fas fa-lock me-2"></i>Password</label>
-                      </div>
-                      <div>
-                        {error && <p style={{ color: 'red' }}>{error}</p>}
-                      </div>
-                      <button type="submit" class="btn btn-primary w-100">
-                        <i class="fas fa-sign-in-alt me-2"></i>Sign In
-                      </button>
-                    </form>
-
-                    <div class="auth-links">
-                      <p>Don`t have an account?</p> <p><a href="/candidate-register">Sign up here as candidate</a></p><p><a href="/employer-register">Sign up here as employer</a></p>
                     </div>
                   </div>
                 </div>

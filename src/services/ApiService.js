@@ -39,6 +39,49 @@ export async function getAdminDashboardData() {
   }).then(_verifyResponse).catch(_handleError);
 }
 
+export async function getCandidateDashboardData() {
+  return fetch(`${API_BASE}/dashboard/candidate`, {
+    method: 'GET',
+    headers: _authHeaders(),
+
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+// export async function getJobsData(){
+//   return fetch(`${API_BASE}/jobs`, {
+//     method: 'GET',
+//     headers: _authHeaders(),
+//   }).then(_verifyResponse).catch(_handleError);
+// }
+
+export async function getJobsData(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/jobs?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getSkillsData() {
+  return fetch(`${API_BASE}/skills`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getCategoriesData() {
+  return fetch(`${API_BASE}/categories`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
 
 // function _post(url, data) {
 //   return fetch(url, {
@@ -54,7 +97,7 @@ function _authHeaders() {
   const headers = {
     'Content-Type': 'application/json',
   };
-  
+
   const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh-token='));
   if (refreshToken) {
     headers['refresh-Token'] = refreshToken.split('=')[1];
@@ -62,7 +105,6 @@ function _authHeaders() {
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
-
   }
   return headers;
 }
@@ -71,8 +113,8 @@ async function _verifyResponse(res) {
   let data = await res.json();
   const contentType = res.headers.get('content-type');
   console.log('Response status:', res.status);
-  if (res.status === 401) {
-    localStorage.removeItem('token');
+  
+  if (res.status == 403 || res.status == 401) {
     window.location.href = '/';
     return;
   }
@@ -91,5 +133,6 @@ async function _verifyResponse(res) {
 }
 
 function _handleError(error) {
+  console.log("eeee" + error);
   return error;
 }
