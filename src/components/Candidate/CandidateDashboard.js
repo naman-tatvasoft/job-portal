@@ -34,7 +34,7 @@ export default class Login extends Component {
         const { totalEmployers, totalJobs, totalCandidates, totalApplications, latestJobs, latestApplications } = this.state;
 
         return (
-            <div id="dashboard" class="page-section">
+            <div id="dashboard" className="page-section">
                 <h1>Job Portal</h1>
                 <h2>Candidate Dashboard</h2>
                 <div className="sidebar">
@@ -46,7 +46,7 @@ export default class Login extends Component {
                         <li><a >logout</a></li>
                     </ul>
                 </div>
-                <div class="dashboard-stats">
+                <div className="dashboard-stats">
                     <div className="stat-item">
                         <h3>Total Employers</h3>
                         <p>{totalEmployers != 0 ? totalEmployers : "Loading..."}</p>

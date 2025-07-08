@@ -101,44 +101,44 @@ export default class Login extends Component {
 
     return (
 
-      <div id="login" class="auth-section container-fluid">
-        <div class="d-flex align-items-center row justify-content-center vh-100">
-          <div class="col-lg-6 d-none d-lg-block">
-            <div class="h-100">
-              <img src="/assets/images/job-hunt.svg" class="img-fluid" alt="Job Portal Illustration" />
+      <div id="login" className="auth-section container-fluid">
+        <div className="d-flex align-items-center row justify-content-center vh-100">
+          <div className="col-lg-6 d-none d-lg-block">
+            <div className="h-100">
+              <img src="/assets/images/job-hunt.svg" className="img-fluid" alt="Job Portal Illustration" />
             </div>
           </div>
-          <div class="col-lg-6 col-md-8">
-            <div class="auth-container">
-              <div class="container-fluid">
-                <div class="row justify-content-center">
-                  <div class="col-lg-8 col-md-10">
-                    <div class="auth-card">
-                      <div class="auth-header">
+          <div className="col-lg-6 col-md-8">
+            <div className="auth-container">
+              <div className="container-fluid">
+                <div className="row justify-content-center">
+                  <div className="col-lg-8 col-md-10">
+                    <div className="auth-card">
+                      <div className="auth-header">
                         <h1>Job Portal</h1>
-                        <h2><i class="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
+                        <h2><i className="fas fa-sign-in-alt me-2"></i>Welcome Back</h2>
                         <p>Sign in to your account</p>
                       </div>
-                      <div class="auth-body">
+                      <div className="auth-body">
                         <form id="loginForm" onSubmit={this.handleSubmit}>
                          
-                          <div class="form-floating mb-3">
-                            <input type="email" class="form-control" id="loginEmail" placeholder="Email" name="email" value={email} onInput={this.handleInput} />
-                            <label for="loginEmail"><i class="fas fa-envelope me-2"></i>Email address</label>
+                          <div className="form-floating mb-3">
+                            <input type="email" className="form-control" id="loginEmail" placeholder="Email" name="email" value={email} onInput={this.handleInput} />
+                            <label for="loginEmail"><i className="fas fa-envelope me-2"></i>Email address</label>
                           </div>
-                          <div class="form-floating mb-3">
-                            <input type="password" class="form-control" id="loginPassword" placeholder="Password" name="password" value={password} onInput={this.handleInput} />
-                            <label for="loginPassword"><i class="fas fa-lock me-2"></i>Password</label>
+                          <div className="form-floating mb-3">
+                            <input type="password" className="form-control" id="loginPassword" placeholder="Password" name="password" value={password} onInput={this.handleInput} />
+                            <label for="loginPassword"><i className="fas fa-lock me-2"></i>Password</label>
                           </div>
                           <div>
                             {error && <p style={{ color: 'red' }}>{error}</p>}
                           </div>
-                          <button type="submit" class="btn btn-primary w-100 m-1">
-                            <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                          <button type="submit" className="btn btn-primary w-100 m-1">
+                            <i className="fas fa-sign-in-alt me-2"></i>Sign In
                           </button>
                         </form>
 
-                        <div class="auth-links">
+                        <div className="auth-links">
                           <p>Don`t have an account?</p> <p><a href="/candidate-register">Sign up here as candidate</a></p><p><a href="/employer-register">Sign up here as employer</a></p>
                         </div>
                       </div>

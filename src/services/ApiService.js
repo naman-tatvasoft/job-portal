@@ -83,6 +83,42 @@ export async function getCategoriesData() {
   }).then(_verifyResponse).catch(_handleError);
 }
 
+export async function getApplicationsData(filters = {}){
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/applications?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getStatusData() {
+  return fetch(`${API_BASE}/statuses`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getApplicationData(id) {
+  return fetch(`${API_BASE}/application?applicationId=${id}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getJobData(id) {
+  return fetch(`${API_BASE}/job/${id}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
 // function _post(url, data) {
 //   return fetch(url, {
 //     method: 'POST',
