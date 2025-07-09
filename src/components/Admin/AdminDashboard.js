@@ -40,51 +40,72 @@ export default class Login extends Component {
     };
 
     render() {
-        const { totalEmployers, totalJobs, totalCandidates, totalApplications, latestJobs, latestApplications } = this.state;
+        const {
+            totalEmployers,
+            totalJobs,
+            totalCandidates,
+            totalApplications,
+            latestJobs,
+            latestApplications
+        } = this.state;
 
         return (
-            <div className="main d-flex">
+            <div class="main d-flex">
                 <Sidebar />
-                <div id="dashboard" className="page-section">
-                    <h2>Admin Dashboard</h2>
-                    <div className="dashboard-stats">
-                        <div className="stat-item">
-                            <h3>Total Employers</h3>
-                            <p>{totalEmployers != 0 ? totalEmployers : "Loading..."}</p>
+                <div id="dashboard" class="container-fluid p-4 bg-light" style="min-height: 100vh;">
+                    <h2 class="mb-4 text-primary">Admin Dashboard</h2>
+
+                    <div class="row g-4 mb-4">
+                        {[
+                            { title: "Total Employers", value: totalEmployers },
+                            { title: "Total Jobs", value: totalJobs },
+                            { title: "Total Candidates", value: totalCandidates },
+                            { title: "Total Applications", value: totalApplications }
+                        ].map((stat, i) => (
+                            <div class="col-md-3" key={i}>
+                                <div class="card shadow-sm border-0 h-100 text-center">
+                                    <div class="card-body">
+                                        <h6 class="card-title text-secondary">{stat.title}</h6>
+                                        <h3 class="text-primary">{stat.value !== 0 ? stat.value : "Loading..."}</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-header bg-primary text-white">
+                                    Latest Jobs
+                                </div>
+                                <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                                    {latestJobs.length > 0 ? latestJobs.map(job => (
+                                        <div class="mb-3 border-bottom pb-2" key={job.id}>
+                                            <h6 class="mb-1 text-primary">{job.title}</h6>
+                                            <p class="mb-0 text-muted">{job.location} | {job.experienceRequired} yrs</p>
+                                            <p class="small">{job.description}</p>
+                                        </div>
+                                    )) : <p>No jobs available</p>}
+                                </div>
+                            </div>
                         </div>
-                        <div className="stat-item">
-                            <h3>Total Jobs</h3>
-                            <p>{totalJobs != 0 ? totalJobs : "Loading..."}</p>
-                        </div>
-                        <div className="stat-item">
-                            <h3>Total Candidates</h3>
-                            <p>{totalCandidates != 0 ? totalCandidates : "Loading..."}</p>
-                        </div>
-                        <div className="stat-item">
-                            <h3>Total Applications</h3>
-                            <p>{totalApplications != 0 ? totalApplications : "Loading..."}</p>
-                        </div>
-                        <div className="stat-item">
-                            <h3>Latest Jobs</h3>
-                            <ul>
-                                {latestJobs.length > 0 ? latestJobs.map(job => (
-                                    <li key={job.id}>
-                                        <strong>{job.title}</strong> - {job.location} ({job.experienceRequired} years exp.)
-                                        <p>{job.description}</p>
-                                    </li>
-                                )) : <p>No jobs available</p>}
-                            </ul>
-                        </div>
-                        <div className="stat-item">
-                            <h3>Latest Applications</h3>
-                            <ul>
-                                {latestApplications.length > 0 ? latestApplications.map(application => (
-                                    <li key={application.id}>
-                                        <strong>{application.jobTitle}</strong> at {application.companyName} by {application.candidateName}
-                                        <p>Status: {application.status}</p>
-                                    </li>
-                                )) : <p>No applications available</p>}
-                            </ul>
+
+                        <div class="col-md-6">
+                            <div class="card shadow-sm border-0 h-100">
+                                <div class="card-header bg-primary text-white">
+                                    Latest Applications
+                                </div>
+                                <div class="card-body" style="max-height: 300px; overflow-y: auto;">
+                                    {latestApplications.length > 0 ? latestApplications.map(app => (
+                                        <div class="mb-3 border-bottom pb-2" key={app.id}>
+                                            <h6 class="mb-1 text-primary">{app.jobTitle}</h6>
+                                            <p class="mb-0 text-muted">{app.companyName} | {app.candidateName}</p>
+                                            <p class="small">Status: {app.status}</p>
+                                        </div>
+                                    )) : <p>No applications available</p>}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

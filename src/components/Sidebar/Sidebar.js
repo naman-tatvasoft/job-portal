@@ -16,39 +16,44 @@ export default class Sidebar extends Component {
 
     render() {
         return (
-            <div class="main-sidebar">
-                <aside class="aside">
-                    <div class="logo-div d-flex m-3 ">
-                        <img src="/assets/images/logo.jfif" alt="Logo" className="cmp-logo img-fluid"
-                            style="width: 55px; height: 45px;" />
-                        <span class="logo-name-aside align-self-center">Job Portal</span>
+            <div className="main-sidebar bg-white shadow-sm" style="min-height: 100vh;">
+
+                <aside className="aside p-3">
+                    <div className="logo-div d-flex align-items-center mb-4">
+                        <img src="/assets/images/logo.jfif" alt="Logo"
+                            className="cmp-logo img-fluid me-2 rounded"
+                            style="width: 50px; height: 50px;" />
+                        <span className="logo-name-aside fs-5 fw-bold text-primary">Job Portal</span>
                     </div>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <span class="icon-name"><a class="text-decoration-none" href="/admin-dashboard">Dashboard</a></span>
+                    <ul className="list-group list-group-flush">
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/admin-dashboard">
+                                <i className="bi bi-speedometer2 me-2"></i> Dashboard
+                            </a>
                         </li>
-                        <li
-                            class="list-group-item">
-                            <span class="icon-name"><a class="text-decoration-none" href="/admin-manage-candidates">Users</a></span>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/admin-manage-candidates">
+                                <i className="bi bi-people me-2"></i> Users
+                            </a>
                         </li>
-                        <li
-                            class="list-group-item">
-                            <span class="icon-name"><a class="text-decoration-none" href="/jobs">Jobs</a></span>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/jobs">
+                                <i className="bi bi-briefcase me-2"></i> Jobs
+                            </a>
                         </li>
-                        <li
-                            class="list-group-item">
-                            <span class="icon-name"><a class="text-decoration-none" href="/applications">Applications</a></span>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/applications">
+                                <i className="bi bi-file-earmark-text me-2"></i> Applications
+                            </a>
                         </li>
-                        <li
-                            class="list-group-item">
-                            <span class="icon-name"><a class="text-decoration-none" onClick={this.handleClick} >logout</a></span>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-danger d-block" onClick={this.handleClick} href="#">
+                                <i className="bi bi-box-arrow-right me-2"></i> Logout
+                            </a>
                         </li>
-
-
                     </ul>
                 </aside>
             </div>
-
         );
     }
 }

@@ -12,8 +12,6 @@ export default class Jobs extends Component {
             categories: [],
             search: '',
             skill: '',
-            location: '',
-            experience: 0,
             category: '',
             pageNumber: 1,
             pageSize: 2
@@ -34,12 +32,10 @@ export default class Jobs extends Component {
     }
 
     async fetchJobs() {
-        const { search, skill, location, experience, category, pageNumber, pageSize } = this.state;
+        const { search, skill, category, pageNumber, pageSize } = this.state;
         const filters = {
             search,
             skill,
-            location,
-            experience,
             category,
             pageNumber,
             pageSize
@@ -50,7 +46,7 @@ export default class Jobs extends Component {
 
     handleInputChange = (e) => {
         const { name, value } = e.target;
-        this.setState({ [name]: value }, () => { 
+        this.setState({ [name]: value }, () => {
             this.debouncedFetchJobs();
         });
     };
@@ -70,94 +66,109 @@ export default class Jobs extends Component {
     };
 
     render() {
-
         const {
-            jobs, search, skill, location,
-            experience, category, pageSize, pageNumber
+            jobs, search, skill, category, pageSize, pageNumber
         } = this.state;
 
         return (
-            <div id="jobs" className="page-section d-flex">
-                <div className="sidebar">
-                    <Sidebar />
-                </div>
+            <div class="main d-flex">
+                <Sidebar />
+                <div id="dashboard" className="container-fluid p-4 bg-light">
+                    <h2 className="mb-4 text-primary">Job Listings</h2>
 
-                <div className="container mt-4">
-                    <h2 className="mb-4">Job Listings</h2>
-
-                    <div className="row mb-4 g-2">
-                        <div className="col-md-4">
-                            <input type="text" className="form-control" placeholder="Search Title" name="search" value={search} onInput={this.handleInputChange} />
-                        </div>
-                        <div className="col-md-2">
-                            <input type="text" className="form-control" placeholder="Location" name="location" value={location} onInput={this.handleInputChange} />
-                        </div>
-                        <div className="col-md-2">
-                            <input type="number" className="form-control" placeholder="Experience" name="experience" value={experience} onInput={this.handleInputChange} />
-                        </div>
-                        <div className="col-md-2">
-                            <select className="form-select" name="skill" value={skill} onChange={this.handleInputChange}>
-                                <option value="">Select Skill</option>
-                                {this.state.skills.map((skill) => (
-                                    <option key={skill.id} value={skill.name}>{skill.name}</option>
-                                ))}
-                            </select>
-                        </div>
-                        <div className="col-md-2">
-                            <select className="form-select" name="category" value={category} onChange={this.handleInputChange}>
-                                <option value="">Select Category</option>
-                                {this.state.categories.map((cat) => (
-                                    <option key={cat.id} value={cat.name}>{cat.name}</option>
-                                ))}
-                            </select>
-                        </div>
-
-                    </div>
-
-                    <div className="table-responsive">
-                        <table className="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Title - category</th>
-                                    <th>Description</th>
-                                    <th>Location</th>
-                                    <th>Experience</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {jobs.length > 0 ? (
-                                    jobs.map((job) => (
-                                        <tr key={job.id}  onClick={() => this.handleRedirects(job.id)}>
-                                            <td  >{job.id}</td>
-                                            <td>{job.title} - {job.categoryName}</td>
-                                            <td>{job.description}</td>
-                                            <td>{job.location}</td>
-                                            <td>{job.experienceRequired} yrs</td>
-                                        </tr>
-                                    ))
-                                ) : (
-                                    <tr>
-                                        <td colSpan="5" className="text-center">No jobs found.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div className="d-flex justify-content-between">
-                        <div>
-                            <div className="col-md-8">
-                                <select className="form-select" name="pageSize" value={pageSize} onChange={this.handlePageSizeChange} id="temp">
-                                    <option value={2}>2 page</option>
-                                    <option value={5}>5 page</option>
-                                    <option value={10}>10 page</option>
-                                    <option value={20}>20 page</option>
-                                </select>
+                    <div className="mb-4 bg-white border rounded-3 shadow-sm p-3 px-md-4">
+                        <h5 className="text-primary mb-3">Filter Jobs</h5>
+                        <div className="row align-items-end">
+                            <div className="col-md-6">
+                                <label className="form-label fw-semibold">Search Title</label>
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="e.g. Software Engineer"
+                                    name="search"
+                                    value={search}
+                                    onInput={this.handleInputChange}
+                                />
                             </div>
-                            <span>Page {pageNumber}</span>
+                            <div className="col-md-6 d-flex gap-3 justify-content-end">
+                                <div>
+                                    <label className="form-label fw-semibold">Skill</label>
+                                    <select
+                                        className="form-select py-2"
+                                        name="skill"
+                                        value={skill}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="">All</option>
+                                        {this.state.skills.map((s) => (
+                                            <option key={s.id} value={s.name}>{s.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label className="form-label fw-semibold">Category</label>
+                                    <select
+                                        className="form-select py-2"
+                                        name="category"
+                                        value={category}
+                                        onChange={this.handleInputChange}
+                                    >
+                                        <option value="">All</option>
+                                        {this.state.categories.map((cat) => (
+                                            <option key={cat.id} value={cat.name}>{cat.name}</option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <div>
+                    </div>
+
+                    <div className="card shadow-sm border-0">
+                        <div className="card-body p-0">
+                            <div className="table-responsive">
+                                <table className="table table-hover mb-0">
+                                    <thead className="table-primary">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Title - Category</th>
+                                            <th>Description</th>
+                                            <th>Location</th>
+                                            <th>Experience</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {jobs.length > 0 ? (
+                                            jobs.map((job) => (
+                                                <tr key={job.id} onClick={() => this.handleRedirects(job.id)} style={{ cursor: "pointer" }}>
+                                                    <td>{job.id}</td>
+                                                    <td>{job.title} - {job.categoryName}</td>
+                                                    <td>{job.description}</td>
+                                                    <td>{job.location}</td>
+                                                    <td>{job.experienceRequired} yrs</td>
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="5" className="text-center py-4">No jobs found.</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="d-flex justify-content-between align-items-center mt-4">
+                        <div className="d-flex align-items-center gap-2">
+                            <select className="form-select w-auto" name="pageSize" value={pageSize} onChange={this.handlePageSizeChange}>
+                                <option value={2}>2 per page</option>
+                                <option value={5}>5 per page</option>
+                                <option value={10}>10 per page</option>
+                                <option value={20}>20 per page</option>
+                            </select>
+                            <span className="ms-2">Page {pageNumber}</span>
+                        </div>
+                        <div className="d-flex gap-2">
                             <button className="btn btn-outline-primary" onClick={() => this.changePage(-1)} disabled={pageNumber <= 1}>
                                 ← Previous
                             </button>
