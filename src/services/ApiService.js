@@ -47,13 +47,6 @@ export async function getCandidateDashboardData() {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-// export async function getJobsData(){
-//   return fetch(`${API_BASE}/jobs`, {
-//     method: 'GET',
-//     headers: _authHeaders(),
-//   }).then(_verifyResponse).catch(_handleError);
-// }
-
 export async function getJobsData(filters = {}) {
   const params = new URLSearchParams();
 
@@ -64,6 +57,21 @@ export async function getJobsData(filters = {}) {
   });
 
   return fetch(`${API_BASE}/jobs?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getUsersData(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/users?${params.toString()}`, {
     method: 'GET',
     headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);
@@ -82,6 +90,14 @@ export async function getCategoriesData() {
     headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);
 }
+
+export async function getRolesData() {
+  return fetch(`${API_BASE}/roles`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
 
 export async function getApplicationsData(filters = {}){
   const params = new URLSearchParams();
@@ -106,7 +122,7 @@ export async function getStatusData() {
 }
 
 export async function getApplicationData(id) {
-  return fetch(`${API_BASE}/application?applicationId=${id}`, {
+  return fetch(`${API_BASE}/application/${id}`, {
     method: 'GET',
     headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);

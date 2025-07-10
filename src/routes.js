@@ -8,6 +8,7 @@ import Applications from './components/Application/Applications.js';
 import CandidateDashboard from './components/Candidate/CandidateDashboard.js';
 import ApplicationDetail from './components/Application/ApplicationDetails.js';
 import JobDetail from './components/Job/JobDetails.js';
+import Users from './components/User/Users.js';
 
 export const routes = [
   <Route key="login" path="/" component={Login} exact />,
@@ -18,6 +19,8 @@ export const routes = [
   <Route key="applications" path="/applications" component={Applications} />,
   <Route key="candidate-dashboard" path="/candidate-dashboard" component={CandidateDashboard} />,
   <Route key="application-detail" path="/application" component={ApplicationDetail} />,
-  <Route key="job-detail" path="/job" component={JobDetail} />
+  <Route key="job-detail" path="/job" component={JobDetail} />,
+  <Route key="users" path="/users" component={Users} />
+
 
 ];

@@ -38,6 +38,22 @@
     transform: rotate(360deg);
   }
 }
+.text-primary{
+  color: #0084c3 !important;
+}
+
+.bg-primary{
+  background-color: #0084c3 !important;
+}
+
+.bg-custom{
+  background-color: rgb(203, 237, 243) !important;
+}
+
+.table-primary{
+  --bs-table-color: #ffffff !important;
+  --bs-table-bg: #0084c3 !important;
+}
 
 /* sidebar */
 .main-sidebar{

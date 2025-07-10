@@ -1,58 +1,22 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getApplicationsData, getStatusData } from '../../services/ApiService.js';
-import debounce from 'lodash/debounce.js';
+
 export default class Applications extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            applications: [],
-            statusData: [],
-            search: '',
-            status: '',
-            pageNumber: 1,
-            pageSize: 2
+            categories: [],
         };
-        this.debouncedFetchApplications = debounce(this.fetchApplications.bind(this), 500);
     }
 
     async componentWillMount() {
-        this.fetchApplications();
-        const statusData = await getStatusData();
-        this.setState({ statusData: statusData || [] });
-    }
-
-    componentWillUnmount() {
-        this.debouncedFetchApplications.cancel();
+        this.fetchCategories();
     }
 
     async fetchApplications() {
-        const { search, status, pageNumber, pageSize } = this.state;
-        const filters = {
-            search,
-            status,
-            pageNumber,
-            pageSize
-        };
-        const applicationsData = await getApplicationsData(filters);
-        this.setState({ applications: applicationsData || [] });
+        const categoryData = await getCategoriesData();
+        this.setState({ categories: categoryData || [] });
     }
-
-
-    handleInputChange = (e) => {
-        const { name, value } = e.target;
-        this.setState({ [name]: value }, () => {
-            this.debouncedFetchApplications();
-        });
-    };
-
-    handlePageSizeChange = (e) => {
-        this.setState({ pageSize: parseInt(e.target.value), pageNumber: 1 }, () => this.fetchApplications());
-    };
-
-    handleRedirects = (id) => {
-        window.location.href = `/application?applicationId=${id}`;
-    };
 
     changePage = (direction) => {
         const newPage = this.state.pageNumber + direction;

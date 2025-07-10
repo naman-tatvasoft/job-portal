@@ -16,7 +16,7 @@ export default class Sidebar extends Component {
 
     render() {
         return (
-            <div className="main-sidebar bg-white shadow-sm" style="min-height: 100vh;">
+            <div className="main-sidebar bg-white shadow-lg" style="min-height: 100vh;">
 
                 <aside className="aside p-3">
                     <div className="logo-div d-flex align-items-center mb-4">
@@ -32,7 +32,7 @@ export default class Sidebar extends Component {
                             </a>
                         </li>
                         <li className="list-group-item py-2 border-0">
-                            <a className="text-decoration-none text-dark d-block" href="/admin-manage-candidates">
+                            <a className="text-decoration-none text-dark d-block" href="/users">
                                 <i className="bi bi-people me-2"></i> Users
                             </a>
                         </li>
