@@ -1,26 +1,26 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getCategoriesData } from '../../services/ApiService.js';
+import { getStatusData } from '../../services/ApiService.js';
 
-export default class Category extends Component {
+export default class Status extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: []
+            statuses: []
         };
     }
 
     async componentWillMount() {
-        this.fetchCategories();
+        this.fetchStatuses();
     }
 
-    async fetchCategories() {
-        const categoryData = await getCategoriesData();
-        this.setState({ categories: categoryData || [] });
+    async fetchStatuses() {
+        const statusData = await getStatusData();
+        this.setState({ statuses: statusData || [] });
     }
 
     render() {
-        const { categories } = this.state;
+        const { statuses } = this.state;
         return (
             <div class="main d-flex">
                 <Sidebar />
@@ -28,9 +28,9 @@ export default class Category extends Component {
 
                     <div className="d-flex justify-content-between">
 
-                        <h2 className="mb-4 text-primary">Categories</h2>
+                        <h2 className="mb-4 text-primary">Statuses</h2>
                         <div>
-                            <a className="btn btn-primary" href="/add-edit-category">+ Add Category</a>
+                            <a className="btn btn-primary" href="/add-edit-status">+ Add status</a>
                         </div>
                     </div>
 
@@ -41,25 +41,25 @@ export default class Category extends Component {
                                     <thead className="table-primary">
                                         <tr>
                                             <th>ID</th>
-                                            <th>Category Name</th>
+                                            <th>Status Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {categories.length > 0 ? (
-                                            categories.map((category) => (
-                                                <tr key={category.id}>
-                                                    <td>{category.id}</td>
-                                                    <td>{category.name}</td>
+                                        {statuses.length > 0 ? (
+                                            statuses.map((status) => (
+                                                <tr key={status.id}>
+                                                    <td>{status.id}</td>
+                                                    <td>{status.name}</td>
                                                     <td>
-                                                        <a className="" href={`/add-edit-category?categoryId=${category.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
+                                                        <a className="" href={`/add-edit-status?statusId=${status.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
                                                         <i class="fa-solid fa-trash-can" ></i>
                                                     </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan="7" className="text-center py-4">No categories found</td>
+                                                <td colSpan="7" className="text-center py-4">No status found</td>
                                             </tr>
                                         )}
                                     </tbody>

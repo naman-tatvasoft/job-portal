@@ -9,6 +9,12 @@ import CandidateDashboard from './components/Candidate/CandidateDashboard.js';
 import ApplicationDetail from './components/Application/ApplicationDetails.js';
 import JobDetail from './components/Job/JobDetails.js';
 import Users from './components/User/Users.js';
+import Category from './components/Category/Category.js';
+import AddEditCategory from './components/Category/AddEditCategory.js';
+import Skill from './components/Skill/Skill.js';
+import AddEditSkill from './components/Skill/AddEditSkill.js';
+import Status from './components/Status/Status.js';
+import AddEditStatus from './components/Status/AddEditStatus.js';
 
 export const routes = [
   <Route key="login" path="/" component={Login} exact />,
@@ -20,7 +26,12 @@ export const routes = [
   <Route key="candidate-dashboard" path="/candidate-dashboard" component={CandidateDashboard} />,
   <Route key="application-detail" path="/application" component={ApplicationDetail} />,
   <Route key="job-detail" path="/job" component={JobDetail} />,
-  <Route key="users" path="/users" component={Users} />
-
+  <Route key="users" path="/users" component={Users} />,
+  <Route key="category" path="/category" component={Category} />,
+  <Route key="add-edit-category" path="/add-edit-category" component={AddEditCategory} />,
+  <Route key="skill" path="/skill" component={Skill} />,
+  <Route key="add-edit-skill" path="/add-edit-skill" component={AddEditSkill} />,
+  <Route key="status" path="/status" component={Status} />,
+  <Route key="add-edit-status" path="/add-edit-status" component={AddEditStatus} />
 
 ];

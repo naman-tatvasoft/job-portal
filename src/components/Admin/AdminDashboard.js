@@ -67,21 +67,27 @@ export default class Login extends Component {
                             icon: "fas fa-tags",
                             description: "Create, edit, or remove job categories.",
                             addText: "Add Category",
-                            viewText: "View All"
+                            viewText: "View All",
+                            link: "/category",
+                            addLink: "/add-edit-category"
                         }, {
                             title: "Skills",
                             subtitle: "Manage Skills",
                             icon: "fas fa-briefcase",
                             description: "Create, edit, or remove job skills.",
                             addText: "Add Skill",
-                            viewText: "View All"
+                            viewText: "View All",
+                            link: "/skill",
+                            addLink: "/add-edit-skill"
                         }, {
                             title: "Status",
                             subtitle: "Manage Statuses",
                             icon: "fas fa-file-alt",
                             description: "Create, edit, or remove application status.",
                             addText: "Add Status",
-                            viewText: "View All"
+                            viewText: "View All",
+                            link: "/status",
+                            addLink: "/add-edit-status"
                         }].map((card, i) => (
                             <div class="col-lg-4 mb-4" key={i}>
                                 <div class="card">
@@ -93,8 +99,8 @@ export default class Login extends Component {
                                         <h5 class="fw-bold mb-3">{card.subtitle}</h5>
                                         <p class="text-muted small mb-4">{card.description}</p>
                                         <div class="d-flex gap-2 justify-content-center">
-                                            <a class="btn btn-primary" href="">{card.addText}</a>
-                                            <a class="btn btn-secondary" href="">{card.viewText}</a>
+                                            <a class="btn btn-primary" href={card.addLink}>{card.addText}</a>
+                                            <a class="btn btn-secondary" href={card.link}>{card.viewText}</a>
                                         </div>
                                     </div>
                                 </div>

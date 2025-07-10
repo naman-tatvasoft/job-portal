@@ -1,26 +1,26 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getCategoriesData } from '../../services/ApiService.js';
+import { getSkillsData } from '../../services/ApiService.js';
 
-export default class Category extends Component {
+export default class Skill extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            categories: []
+            skills: []
         };
     }
 
     async componentWillMount() {
-        this.fetchCategories();
+        this.fetchSkills();
     }
 
-    async fetchCategories() {
-        const categoryData = await getCategoriesData();
-        this.setState({ categories: categoryData || [] });
+    async fetchSkills() {
+        const skillsData = await getSkillsData();
+        this.setState({ skills: skillsData || [] });
     }
 
     render() {
-        const { categories } = this.state;
+        const { skills } = this.state;
         return (
             <div class="main d-flex">
                 <Sidebar />
@@ -28,9 +28,9 @@ export default class Category extends Component {
 
                     <div className="d-flex justify-content-between">
 
-                        <h2 className="mb-4 text-primary">Categories</h2>
+                        <h2 className="mb-4 text-primary">Skills</h2>
                         <div>
-                            <a className="btn btn-primary" href="/add-edit-category">+ Add Category</a>
+                            <a className="btn btn-primary" href="/add-edit-skill">+ Add Skill</a>
                         </div>
                     </div>
 
@@ -41,25 +41,25 @@ export default class Category extends Component {
                                     <thead className="table-primary">
                                         <tr>
                                             <th>ID</th>
-                                            <th>Category Name</th>
+                                            <th>Skill Name</th>
                                             <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {categories.length > 0 ? (
-                                            categories.map((category) => (
-                                                <tr key={category.id}>
-                                                    <td>{category.id}</td>
-                                                    <td>{category.name}</td>
+                                        {skills.length > 0 ? (
+                                            skills.map((skill) => (
+                                                <tr key={skill.id}>
+                                                    <td>{skill.id}</td>
+                                                    <td>{skill.name}</td>
                                                     <td>
-                                                        <a className="" href={`/add-edit-category?categoryId=${category.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
+                                                        <a className="" href={`/add-edit-skill?skillId=${skill.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
                                                         <i class="fa-solid fa-trash-can" ></i>
                                                     </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan="7" className="text-center py-4">No categories found</td>
+                                                <td colSpan="7" className="text-center py-4">No skills found</td>
                                             </tr>
                                         )}
                                     </tbody>
