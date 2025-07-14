@@ -52,12 +52,6 @@ export default class AddEditStatus extends Component {
             ? await updateStatusData(statusId, payload)
             : await addStatusData(payload);
         
-        
-        
-        
-        
-        
-        
         if (success) {
             this.setState({
                 showToast: true,

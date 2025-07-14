@@ -1,6 +1,6 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getSkillsData } from '../../services/ApiService.js';
+import { getSkillsData, deleteSkillData } from '../../services/ApiService.js';
 
 export default class Skill extends Component {
     constructor(props) {
@@ -18,6 +18,20 @@ export default class Skill extends Component {
         const skillsData = await getSkillsData();
         this.setState({ skills: skillsData || [] });
     }
+
+    handleDeleteSkill = async (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this skill?");
+        if (!confirmDelete) return;
+    
+        const deleted = await deleteSkillData(id);
+        if (deleted) {
+            this.setState(prevState => ({
+                skills: prevState.skills.filter(cat => cat.id !== id)
+            }));
+        } else {
+            alert("Failed to delete skill. Please try again.");
+        }
+    };
 
     render() {
         const { skills } = this.state;
@@ -53,7 +67,7 @@ export default class Skill extends Component {
                                                     <td>{skill.name}</td>
                                                     <td>
                                                         <a className="" href={`/add-edit-skill?skillId=${skill.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
-                                                        <i class="fa-solid fa-trash-can" ></i>
+                                                        <i class="fa-solid fa-trash-can" onClick={() => this.handleDeleteSkill(skill.id)} ></i>
                                                     </td>
                                                 </tr>
                                             ))

@@ -47,6 +47,21 @@ export default class Sidebar extends Component {
                             </a>
                         </li>
                         <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/category">
+                                <i className="fas fa-tags me-2"></i> Categories
+                            </a>
+                        </li>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/skill">
+                                <i className="fas fa-briefcase me-2"></i> Skills
+                            </a>
+                        </li>
+                        <li className="list-group-item py-2 border-0">
+                            <a className="text-decoration-none text-dark d-block" href="/status">
+                                <i className="bi bi-file-earmark-text me-2"></i> Statuses
+                            </a>
+                        </li>
+                        <li className="list-group-item py-2 border-0">
                             <a className="text-decoration-none text-danger d-block" onClick={this.handleClick} href="#">
                                 <i className="bi bi-box-arrow-right me-2"></i> Logout
                             </a>

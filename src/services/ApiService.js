@@ -40,39 +40,7 @@ export async function getRolesData() {
 }
 
 
-
-
-
-export async function getAdminDashboardData() {
-  return fetch(`${API_BASE}/dashboard/admin`, {
-    method: 'GET',
-    headers: _authHeaders(),
-  }).then(_verifyResponse).catch(_handleError);
-}
-
-export async function getCandidateDashboardData() {
-  return fetch(`${API_BASE}/dashboard/candidate`, {
-    method: 'GET',
-    headers: _authHeaders(),
-
-  }).then(_verifyResponse).catch(_handleError);
-}
-
-export async function getJobsData(filters = {}) {
-  const params = new URLSearchParams();
-
-  Object.entries(filters).forEach(([key, value]) => {
-    if (value !== "" && value !== 0 && value != null) {
-      params.append(key, value);
-    }
-  });
-
-  return fetch(`${API_BASE}/jobs?${params.toString()}`, {
-    method: 'GET',
-    headers: _authHeaders()
-  }).then(_verifyResponse).catch(_handleError);
-}
-
+//User
 export async function getUsersData(filters = {}) {
   const params = new URLSearchParams();
 
@@ -88,7 +56,49 @@ export async function getUsersData(filters = {}) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function getApplicationsData(filters = {}){
+
+//Dashboard
+export async function getAdminDashboardData() {
+  return fetch(`${API_BASE}/dashboard/admin`, {
+    method: 'GET',
+    headers: _authHeaders(),
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getCandidateDashboardData() {
+  return fetch(`${API_BASE}/dashboard/candidate`, {
+    method: 'GET',
+    headers: _authHeaders(),
+
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+//Jobs
+export async function getJobsData(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/jobs?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getJobData(id) {
+  return fetch(`${API_BASE}/job/${id}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+
+//Applications
+export async function getApplicationsData(filters = {}) {
   const params = new URLSearchParams();
 
   Object.entries(filters).forEach(([key, value]) => {
@@ -103,7 +113,6 @@ export async function getApplicationsData(filters = {}){
   }).then(_verifyResponse).catch(_handleError);
 }
 
-
 export async function getApplicationData(id) {
   return fetch(`${API_BASE}/application/${id}`, {
     method: 'GET',
@@ -111,18 +120,9 @@ export async function getApplicationData(id) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function getJobData(id) {
-  return fetch(`${API_BASE}/job/${id}`, {
-    method: 'GET',
-    headers: _authHeaders()
-  }).then(_verifyResponse).catch(_handleError);
-}
-
-
-
 
 // category
-export async function getCategoriesData(){
+export async function getCategoriesData() {
   return fetch(`${API_BASE}/categories`, {
     method: 'GET',
     headers: _authHeaders()
@@ -144,13 +144,21 @@ export async function addCategoryData(data) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function updateCategoryData(data) {
-  return fetch(`${API_BASE}/category`, {
+export async function updateCategoryData(categoryId, data) {
+  return fetch(`${API_BASE}/category/${categoryId}`, {
     method: 'PUT',
     headers: _authHeaders(),
     body: JSON.stringify(data),
   }).then(_verifyResponse).catch(_handleError);
 }
+
+export async function deleteCategoryData(id) {
+    return fetch(`${API_BASE}/category/${id}`, {
+      method: 'DELETE',
+      headers: _authHeaders()
+    }).then(_verifyResponse).catch(_handleError);
+}
+
 
 //skills
 export async function getSkillsData() {
@@ -175,11 +183,18 @@ export async function addSkillData(data) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function updateSkillData(data) {
-  return fetch(`${API_BASE}/skill`, {
+export async function updateSkillData(skillId, data) {
+  return fetch(`${API_BASE}/skill/${skillId}`, {
     method: 'PUT',
     headers: _authHeaders(),
     body: JSON.stringify(data),
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function deleteSkillData(id) {
+  return fetch(`${API_BASE}/skill/${id}`, {
+    method: 'DELETE',
+    headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);
 }
 
@@ -207,13 +222,21 @@ export async function addStatusData(data) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function updateStatusData(data) {
-  return fetch(`${API_BASE}/status`, {
+export async function updateStatusData(statusId, data) {
+  return fetch(`${API_BASE}/status/${statusId}`, {
     method: 'PUT',
     headers: _authHeaders(),
     body: JSON.stringify(data),
   }).then(_verifyResponse).catch(_handleError);
 }
+
+export async function deleteStatusData(id) {
+  return fetch(`${API_BASE}/status/${id}`, {
+    method: 'DELETE',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
 
 //token
 function _authHeaders() {
@@ -238,7 +261,7 @@ async function _verifyResponse(res) {
   let data = await res.json();
   const contentType = res.headers.get('content-type');
   console.log('Response status:', res.status);
-  
+
   if (res.status == 403 || res.status == 401) {
     window.location.href = '/';
     return;

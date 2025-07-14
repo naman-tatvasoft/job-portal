@@ -1,6 +1,6 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getCategoriesData } from '../../services/ApiService.js';
+import { getCategoriesData, deleteCategoryData } from '../../services/ApiService.js';
 
 export default class Category extends Component {
     constructor(props) {
@@ -18,6 +18,21 @@ export default class Category extends Component {
         const categoryData = await getCategoriesData();
         this.setState({ categories: categoryData || [] });
     }
+
+    handleDeleteCategory = async (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this category?");
+        if (!confirmDelete) return;
+    
+        const deleted = await deleteCategoryData(id);
+        console.log("delete", deleted);
+        if (deleted) {
+            this.setState(prevState => ({
+                categories: prevState.categories.filter(cat => cat.id !== id)
+            }));
+        } else {
+            alert("Failed to delete category. Please try again.");
+        }
+    };
 
     render() {
         const { categories } = this.state;
@@ -53,7 +68,7 @@ export default class Category extends Component {
                                                     <td>{category.name}</td>
                                                     <td>
                                                         <a className="" href={`/add-edit-category?categoryId=${category.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
-                                                        <i class="fa-solid fa-trash-can" ></i>
+                                                        <i class="fa-solid fa-trash-can" onClick={() => this.handleDeleteCategory(category.id)} ></i>
                                                     </td>
                                                 </tr>
                                             ))

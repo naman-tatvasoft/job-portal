@@ -1,6 +1,6 @@
 import { Component } from 'inferno';
 import Sidebar from '../Sidebar/Sidebar.js';
-import { getStatusData } from '../../services/ApiService.js';
+import { getStatusData, deleteStatusData } from '../../services/ApiService.js';
 
 export default class Status extends Component {
     constructor(props) {
@@ -18,6 +18,20 @@ export default class Status extends Component {
         const statusData = await getStatusData();
         this.setState({ statuses: statusData || [] });
     }
+
+    handleDeleteStatus = async (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this status?");
+        if (!confirmDelete) return;
+    
+        const deleted = await deleteStatusData(id);
+        if (deleted) {
+            this.setState(prevState => ({
+                statuses: prevState.statuses.filter(cat => cat.id !== id)
+            }));
+        } else {
+            alert("Failed to delete status. Please try again.");
+        }
+    };
 
     render() {
         const { statuses } = this.state;
@@ -53,7 +67,7 @@ export default class Status extends Component {
                                                     <td>{status.name}</td>
                                                     <td>
                                                         <a className="" href={`/add-edit-status?statusId=${status.id}`}><i class="fa-solid me-3 fa-pen"></i></a>
-                                                        <i class="fa-solid fa-trash-can" ></i>
+                                                        <i class="fa-solid fa-trash-can" onClick={() => this.handleDeleteStatus(status.id)} ></i>
                                                     </td>
                                                 </tr>
                                             ))
