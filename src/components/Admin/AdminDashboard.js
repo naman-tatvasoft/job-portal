@@ -14,7 +14,6 @@ export default class Login extends Component {
             latestApplications: [],
             latestUsers: [],
         };
-        this.handleClick = this.handleClick.bind(this);
     }
 
     async componentWillMount() {
@@ -32,14 +31,6 @@ export default class Login extends Component {
             });
         }
     }
-
-    handleClick = (e) => {
-        e.preventDefault();
-        localStorage.removeItem('access-token');
-        localStorage.removeItem('role');
-        document.cookie = 'refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/;';
-        window.location.href = '/';
-    };
 
     render() {
         const {

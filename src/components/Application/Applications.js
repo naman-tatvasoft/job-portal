@@ -101,45 +101,54 @@ export default class Applications extends Component {
                         </div>
                     </div>
 
-                    <div className="card shadow-sm border-0">
-                        <div className="card-body p-0">
-                            <div className="table-responsive">
-                                <table className="table table-hover mb-0">
-                                    <thead className="table-primary">
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Candidate Name</th>
-                                            <th>Candidate Email</th>
-                                            <th>Job Title</th>
-                                            <th>Company Name</th>
-                                            <th>Applied on</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {applications.length > 0 ? (
-                                            applications.map((application) => (
-                                                <tr key={application.id} onClick={() => this.handleRedirects(application.id)} style={{ cursor: "pointer" }}>
-                                                    <td>{application.id}</td>
-                                                    <td>{application.candidateName}</td>
-                                                    <td>{application.candidateEmail}</td>
-                                                    <td>{application.jobTitle}</td>
-                                                    <td>{application.companyName}</td>
-                                                    <td>{application.applicationDate}</td>
-                                                    <td>{application.status}</td>
-                                                </tr>
-                                            ))
-                                        ) : (
-                                            <tr>
-                                                <td colSpan="7" className="text-center py-4">No applications found</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                    <div className="row">
+                        {applications.length > 0 ? (
+                            applications.map((application) => (
+                                <div className="col-md-6 mb-4" key={application.id}>
+                                    <div className="card h-100 shadow-sm border-0"
+                                         style={{ cursor: 'pointer' }}
+                                            onClick={() => this.handleRedirects(application.id)}>
+                                        <div className="card-body">
+                                            <div className="d-flex justify-content-between">
+                                                <h5 className="text-primary fw-bold mb-2">{application.candidateName}</h5>
+                                                <span className="badge bg-secondary">{application.status}</span>
+                                            </div>
+                                            <p className="mb-1"><i className="bi bi-envelope"></i> {application.candidateEmail}</p>
+                                            <p className="mb-1"><i className="bi bi-briefcase-fill"></i> <strong>{application.jobTitle}</strong> @ {application.companyName}</p>
+                                            <p className="mb-1"><i className="bi bi-geo-alt-fill"></i> {application.jobLocation}</p>
+                                            <p className="mb-1"><i className="bi bi-clock-history"></i> Applied on: {new Date(application.applicationDate).toLocaleDateString()}</p>
+                                            <p className="mb-2"><i className="bi bi-person-workspace"></i> {application.experience} yrs experience</p>
+                                            {application.noteForEmployer && (
+                                                <p className="text-muted fst-italic small mb-2">Note: {application.noteForEmployer}</p>
+                                            )}
+                                            <div className="d-flex flex-wrap gap-2">
+                                                <a
+                                                    className="btn btn-outline-primary btn-sm"
+                                                    href={`/files/${application.resumeName}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <i className="bi bi-file-earmark-person"></i> View Resume
+                                                </a>
+                                                <a
+                                                    className="btn btn-outline-secondary btn-sm"
+                                                    href={`/files/${application.coverLetterName}`}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                >
+                                                    <i className="bi bi-file-earmark-text"></i> View Cover Letter
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="col-12 text-center py-5">
+                                <p className="text-muted">No applications found.</p>
                             </div>
-                        </div>
+                        )}
                     </div>
-
                     <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="d-flex align-items-center gap-2">
                             <select className="form-select w-auto" name="pageSize" value={pageSize} onChange={this.handlePageSizeChange}>

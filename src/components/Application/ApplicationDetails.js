@@ -45,7 +45,7 @@ export default class ApplicationDetail extends Component {
                                 </div>
                                 <div className="col-md-12 mt-5">
                                     <p><i className="bi bi-file-text-fill text-primary me-2"></i><strong>Experience:</strong> {applicationData.experience} years</p>
-                                    <p><i className="bi bi-chat-left-text-fill text-primary me-2"></i><strong>Note for Employer:</strong> {applicationData.noteForEmployer}</p>
+                                    <p><i className="bi bi-chat-left-text-fill text-primary me-2"></i><strong>Note for Employer:</strong> {applicationData.noteForEmployer || "NA"}</p>
                                     <p><i className="bi bi-file-earmark-pdf-fill text-primary me-2"></i><strong>Status:</strong> {applicationData.status}</p>
                                 </div>
                             </div>

@@ -65,11 +65,18 @@ export async function getAdminDashboardData() {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-export async function getCandidateDashboardData() {
-  return fetch(`${API_BASE}/dashboard/candidate`, {
+export async function getEmployerDashboardData(employerId) {
+  return fetch(`${API_BASE}/dashboard/employer/${employerId}`, {
     method: 'GET',
     headers: _authHeaders(),
 
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getId(token) {
+  return fetch(`${API_BASE}/token/user-id?token=${token}`, {
+    method: 'GET',
+    headers: _authHeaders(),
   }).then(_verifyResponse).catch(_handleError);
 }
 
@@ -96,6 +103,27 @@ export async function getJobData(id) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
+export async function getCreatedJobsData(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/created-jobs?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function deleteJobData(id) {
+  return fetch(`${API_BASE}/job/${id}`, {
+    method: 'DELETE',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
 
 //Applications
 export async function getApplicationsData(filters = {}) {
@@ -240,7 +268,6 @@ export async function deleteStatusData(id) {
 
 //token
 function _authHeaders() {
-
   const token = localStorage.getItem('access-token');
   const headers = {
     'Content-Type': 'application/json',

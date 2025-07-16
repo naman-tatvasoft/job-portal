@@ -1,9 +1,9 @@
 import { Component } from 'inferno';
-import Sidebar from '../Sidebar/Sidebar.js';
-import { getJobsData, getSkillsData, getCategoriesData } from '../../services/ApiService.js';
+import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
+import { getCreatedJobsData, getSkillsData, getCategoriesData, deleteJobData } from '../../services/ApiService.js';
 import debounce from 'lodash/debounce.js';
 
-export default class Jobs extends Component {
+export default class CreatedJobs extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -40,7 +40,7 @@ export default class Jobs extends Component {
             pageNumber,
             pageSize
         };
-        const jobsData = await getJobsData(filters);
+        const jobsData = await getCreatedJobsData(filters);
         this.setState({ jobs: jobsData || [] });
     }
 
@@ -56,13 +56,27 @@ export default class Jobs extends Component {
     };
 
     handleRedirects = (id) => {
-        window.location.href = `/job?jobId=${id}`;
+        window.location.href = `/created-job?jobId=${id}`;
     };
 
     changePage = (direction) => {
         const newPage = this.state.pageNumber + direction;
         if (newPage < 1) return;
         this.setState({ pageNumber: newPage }, () => this.fetchJobs());
+    };
+
+    handleDeleteJob = async (id) => {
+        const confirmDelete = window.confirm("Are you sure you want to delete this job?");
+        if (!confirmDelete) return;
+
+        const deleted = await deleteJobData(id);
+        if (deleted) {
+            this.setState(prevState => ({
+                jobs: prevState.jobs.filter(job => job.id !== id)
+            }));
+        } else {
+            alert("Failed to delete skill. Please try again.");
+        }
     };
 
     render() {
@@ -72,10 +86,14 @@ export default class Jobs extends Component {
 
         return (
             <div class="main d-flex">
-                <Sidebar />
+                <EmployerSidebar />
                 <div id="dashboard" className="container-fluid p-4 bg-custom">
-                    <h2 className="mb-4 text-primary">Job Listings</h2>
-
+                    <div className="d-flex justify-content-between">
+                        <h2 className="mb-4 text-primary">Created Jobs</h2>
+                        <div>
+                            <a className="btn btn-primary" href="/add-job">+ Add Job</a>
+                        </div>
+                    </div>
                     <div className="mb-4 bg-white border rounded-3 shadow-sm p-3 px-md-4">
                         <h5 className="text-primary mb-3">Filter Jobs</h5>
                         <div className="row align-items-end">
@@ -130,7 +148,17 @@ export default class Jobs extends Component {
                                     <div className="card h-100 shadow-sm border-0">
                                         <div className="card-body d-flex flex-column justify-content-between">
                                             <div>
-                                                <h5 className="card-title text-primary fw-bold">{job.title} - {job.categoryName} </h5>
+                                                <div className="d-flex gap-2 justify-content-between align-items-center mt-2">
+                                                    <h5 className="card-title text-primary fw-bold">{job.title} - {job.categoryName} </h5>
+                                                    <div className="d-flex gap-2 justify-content-end align-items-center mt-2">
+                                                        <a className="btn btn-outline-primary btn-sm" href={`/update-job?jobId=${job.id}`}>
+                                                            Edit
+                                                        </a>
+                                                        <button className="btn btn-outline-danger btn-sm" onClick={() => this.handleDeleteJob(job.id)}>
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </div>
                                                 <h6 className="text-muted mb-2">{job.companyName || "Company Name"}</h6>
                                                 <div className="mb-2 text-muted">
                                                     <i className="bi bi-geo-alt"></i> {job.location} &nbsp; | &nbsp;
@@ -170,6 +198,7 @@ export default class Jobs extends Component {
                             </div>
                         )}
                     </div>
+
                     <div className="d-flex justify-content-between align-items-center mt-4">
                         <div className="d-flex align-items-center gap-2">
                             <select className="form-select w-auto" name="pageSize" value={pageSize} onChange={this.handlePageSizeChange}>
