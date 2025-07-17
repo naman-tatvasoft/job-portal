@@ -1,8 +1,9 @@
 import { Component } from 'inferno';
-import Sidebar from '../Sidebar/Sidebar.js';
+import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
 import { getApplicationsData, getStatusData } from '../../services/ApiService.js';
 import debounce from 'lodash/debounce.js';
-export default class Applications extends Component {
+
+export default class AppliedApplications extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -63,9 +64,9 @@ export default class Applications extends Component {
         const { applications, search, status, statusData, pageSize, pageNumber } = this.state;
         return (
             <div class="main d-flex">
-                <Sidebar />
+                <EmployerSidebar />
                 <div id="dashboard" className="container-fluid p-4 bg-custom">
-                    <h2 className="mb-4 text-primary">Applications Listing</h2>
+                    <h2 className="mb-4 text-primary">Applied Applications</h2>
 
                     <div className="mb-4 bg-white border rounded-3 shadow-sm p-3 px-md-4">
                         <h5 className="text-primary mb-3">Filter Applications</h5>

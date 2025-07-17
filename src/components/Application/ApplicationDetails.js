@@ -54,9 +54,6 @@ export default class ApplicationDetail extends Component {
 
                             <div>
                                 <h6 className="text-primary">Cover Letter</h6>
-                                {/* downloadable coverletter */}
-                                
-
                                 {applicationData.coverLetterName ? (
                                     <a href={`${API_BASE}/uploads/CoverLetters/${applicationData.coverLetterName}`} target="_blank" rel="noopener noreferrer" className="btn btn-secondary">
                                         View Cover Letter

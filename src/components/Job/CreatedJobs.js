@@ -1,6 +1,6 @@
 import { Component } from 'inferno';
 import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
-import { getCreatedJobsData, getSkillsData, getCategoriesData, deleteJobData } from '../../services/ApiService.js';
+import { getCreatedJobsData, getSkillsData, getCategoriesData, deleteJobData, addJobData, editJobData } from '../../services/ApiService.js';
 import debounce from 'lodash/debounce.js';
 
 export default class CreatedJobs extends Component {
@@ -14,8 +14,21 @@ export default class CreatedJobs extends Component {
             skill: '',
             category: '',
             pageNumber: 1,
-            pageSize: 2
+            pageSize: 2,
+            showModal: false,
+            form: {
+                id: 0,
+                title: '',
+                location: '',
+                experienceRequired: '',
+                description: '',
+                categoryId: 0,
+                skillsRequiredList: [],
+                vacancies: 0
+            },
+            validationError: ''
         };
+
         this.debouncedFetchJobs = debounce(this.fetchJobs.bind(this), 500);
     }
 
@@ -79,6 +92,142 @@ export default class CreatedJobs extends Component {
         }
     };
 
+    handleShowModal = () => {
+        this.setState({ showModal: true });
+    };
+
+    handleCloseModal = () => {
+        this.setState({
+            showModal: false, form: {
+                id: 0,
+                title: '',
+                location: '',
+                experienceRequired: '',
+                description: '',
+                categoryId: 0,
+                skillsRequiredList: [],
+                vacancies: 0
+            },
+            validationError: ''
+        });
+    };
+
+    handleFormChange = (e) => {
+        const { name, value } = e.target;
+        const parsedValue = (name === 'categoryId' || name === 'experienceRequired' || name === 'vacancies')
+            ? (value === '' ? 0 : parseInt(value))
+            : value;
+
+        this.setState(prev => ({
+            form: {
+                ...prev.form,
+                [name]: parsedValue
+            }
+        }));
+    };
+
+    handleCheckboxChange = (e, skill) => {
+        const { checked } = e.target;
+
+        this.setState((prev) => {
+            const updatedSkills = checked
+                ? [...prev.form.skillsRequiredList, { id: skill.id, name: skill.name }]
+                : prev.form.skillsRequiredList.filter(s => s.id !== skill.id);
+
+            return {
+                form: {
+                    ...prev.form,
+                    skillsRequiredList: updatedSkills
+                }
+            };
+        });
+    };
+
+    handleSubmitJob = async () => {
+        const { title, location, experienceRequired, categoryId } = this.state.form;
+
+        if (!title || !location || !experienceRequired || !categoryId) {
+            this.setState({ validationError: 'Please fill all required fields.' });
+            return;
+        }
+
+        const { skillsRequiredList } = this.state.form;
+        if (skillsRequiredList.length === 0) {
+            this.setState({ validationError: 'Please select at least one skill.' });
+            return;
+        }
+
+        const success = await addJobData(this.state.form);
+        if (success) {
+            this.setState({
+                showModal: false, 
+                form: {
+                    id: 0,
+                    title: '',
+                    location: '',
+                    experienceRequired: '',
+                    description: '',
+                    categoryId: 0,
+                    skillsRequiredList: [],
+                    vacancies: 0
+                }, 
+                validationError: ''
+            });
+            this.fetchJobs();
+        } else {
+            alert('Failed to add job. Please try again.');
+        }
+    };
+
+    handleEditJob = async (jobId) => {
+        const { title, location, experienceRequired, categoryId } = this.state.form;
+
+        if (!title || !location || !experienceRequired || !categoryId) {
+            this.setState({ validationError: 'Please fill all required fields.' });
+            return;
+        }
+
+        const { skillsRequiredList } = this.state.form;
+        if (skillsRequiredList.length === 0) {
+            this.setState({ validationError: 'Please select at least one skill.' });
+            return;
+        }
+
+        const success = await editJobData(jobId, this.state.form);
+        if (success) {
+            this.setState({
+                showModal: false, 
+                form: {
+                    id: 0,
+                    title: '',
+                    location: '',
+                    experienceRequired: '',
+                    description: '',
+                    categoryId: 0,
+                    skillsRequiredList: [],
+                    vacancies: 0
+                }, 
+                validationError: ''
+            });
+            this.fetchJobs();
+        } else {
+            alert('Failed to add job. Please try again.');
+        }
+    }
+
+    handleEditShowModal = (id) => {
+        this.setState({ form: { id: id } })
+        const job = this.state.jobs.find(job => job.id === this.state.form.id);
+        if (job) {
+            this.setState({
+                showModal: true,
+                form: {
+                    ...job
+                }
+            });
+        }
+    }
+
     render() {
         const {
             jobs, search, skill, category, pageSize, pageNumber
@@ -91,7 +240,7 @@ export default class CreatedJobs extends Component {
                     <div className="d-flex justify-content-between">
                         <h2 className="mb-4 text-primary">Created Jobs</h2>
                         <div>
-                            <a className="btn btn-primary" href="/add-job">+ Add Job</a>
+                            <button className="btn btn-primary" onClick={this.handleShowModal}>+ Add Job</button>
                         </div>
                     </div>
                     <div className="mb-4 bg-white border rounded-3 shadow-sm p-3 px-md-4">
@@ -151,11 +300,9 @@ export default class CreatedJobs extends Component {
                                                 <div className="d-flex gap-2 justify-content-between align-items-center mt-2">
                                                     <h5 className="card-title text-primary fw-bold">{job.title} - {job.categoryName} </h5>
                                                     <div className="d-flex gap-2 justify-content-end align-items-center mt-2">
-                                                        <a className="btn btn-outline-primary btn-sm" href={`/update-job?jobId=${job.id}`}>
-                                                            Edit
-                                                        </a>
-                                                        <button className="btn btn-outline-danger btn-sm" onClick={() => this.handleDeleteJob(job.id)}>
-                                                            Delete
+                                                        <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleEditShowModal(job.id)}>Edit</button>
+                                                        <button className="btn btn-outline-danger btn-sm" onClick={() => this.handleDeleteJob(job.id)} >
+                                                            <i class="fa-solid fa-trash-can"></i>
                                                         </button>
                                                     </div>
                                                 </div>
@@ -219,7 +366,111 @@ export default class CreatedJobs extends Component {
                         </div>
                     </div>
                 </div>
+                {this.state.showModal && (
+                    <div className="custom-modal-backdrop">
+                        <div className="custom-modal">
+                            <div className="custom-modal-header">
+                                {this.state.form.id != 0 ? <h5>Edit Job</h5> : <h5>Add Job</h5>}
+                                <button onClick={this.handleCloseModal} className="close-btn">×</button>
+                            </div>
+                            <div className="custom-modal-body">
+                                <label>Job Title *</label>
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    name="title"
+                                    value={this.state.form.title}
+                                    onInput={this.handleFormChange}
+                                />
+
+                                <label>Location *</label>
+                                <input
+                                    type="text"
+                                    className="form-control mb-2"
+                                    name="location"
+                                    value={this.state.form.location}
+                                    onInput={this.handleFormChange}
+                                />
+
+                                <label>Experience (years) *</label>
+                                <input
+                                    type="number"
+                                    className="form-control mb-2"
+                                    name="experienceRequired"
+                                    value={this.state.form.experienceRequired}
+                                    onInput={this.handleFormChange}
+                                />
+
+                                <label>Category *</label>
+                                <select
+                                    name="categoryId"
+                                    className="form-select mb-2"
+                                    value={this.state.form.categoryId}
+                                    onChange={this.handleFormChange}
+                                >
+                                    <option value="" >Select Category</option>
+                                    {this.state.categories.map((cat) => (
+                                        <option key={cat.id} value={cat.id}>{cat.name}</option>
+                                    ))}
+                                </select>
+
+                                <label>Description</label>
+                                <textarea
+                                    className="form-control mb-2"
+                                    name="description"
+                                    value={this.state.form.description}
+                                    onInput={this.handleFormChange}
+                                />
+
+                                <label>vacancies*</label>
+                                <input
+                                    type="number"
+                                    className="form-control mb-2"
+                                    name="vacancies"
+                                    value={this.state.form.vacancies}
+                                    onInput={this.handleFormChange}
+                                />
+
+
+                                <label>Skills *</label>
+                                <div className="skills-checkbox-group mb-2">
+                                    {this.state.skills.map((skill) => {
+                                        const isChecked = this.state.form.skillsRequiredList.some(s => s.id === skill.id);
+                                        return (
+                                            <label key={skill.id} className="d-block">
+                                                <input
+                                                    type="checkbox"
+                                                    value={skill.id}
+                                                    checked={isChecked}
+                                                    onChange={(e) => this.handleCheckboxChange(e, skill)}
+                                                />
+                                                {' '}
+                                                {skill.name}
+                                            </label>
+                                        );
+                                    })}
+                                </div>
+
+                                {this.state.validationError && (
+                                    <div className="text-danger mb-2">{this.state.validationError}</div>
+                                )}
+
+                                {this.state.form.id != 0 ?
+                                    <button className="btn btn-primary mt-2" onClick={() => this.handleEditJob(this.state.form.id)}>
+                                        Edit Job
+                                    </button> :
+                                    <button className="btn btn-primary mt-2" onClick={this.handleSubmitJob}>
+                                        Add Job
+                                    </button>
+                                }
+
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+
+
         );
     }
 }

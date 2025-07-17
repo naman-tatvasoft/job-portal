@@ -39,7 +39,6 @@ export async function getRolesData() {
   }).then(_verifyResponse).catch(_handleError);
 }
 
-
 //User
 export async function getUsersData(filters = {}) {
   const params = new URLSearchParams();
@@ -55,7 +54,6 @@ export async function getUsersData(filters = {}) {
     headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);
 }
-
 
 //Dashboard
 export async function getAdminDashboardData() {
@@ -119,11 +117,28 @@ export async function getCreatedJobsData(filters = {}) {
 }
 
 export async function deleteJobData(id) {
-  return fetch(`${API_BASE}/job/${id}`, {
-    method: 'DELETE',
+  return fetch(`${API_BASE}/delete/job/${id}`, {
+    method: 'PUT',
     headers: _authHeaders()
   }).then(_verifyResponse).catch(_handleError);
 }
+
+export async function addJobData(job) {
+  return fetch(`${API_BASE}/job`, {
+    method: 'POST',
+    headers: _authHeaders(),
+    body: JSON.stringify(job),
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function editJobData(jobId, job) {
+  return fetch(`${API_BASE}/job/${jobId}`, {
+    method: 'PUT',
+    headers: _authHeaders(),
+    body: JSON.stringify(job),
+  }).then(_verifyResponse).catch(_handleError);
+}
+
 
 //Applications
 export async function getApplicationsData(filters = {}) {

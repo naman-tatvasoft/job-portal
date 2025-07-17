@@ -17,6 +17,7 @@ import AddEditStatus from './components/Status/AddEditStatus.js';
 import EmployerDashboard from './components/Employer/EmployerDashboard.js';
 import CreatedJobs from './components/Job/CreatedJobs.js';
 import CreatedJobDetails from './components/Job/CreatedJobDetails.js';
+import AppliedApplications from './components/Application/AppliedApplications.js';
 
 export const routes = [
   <Route key="login" path="/" component={Login} exact />,
@@ -34,10 +35,8 @@ export const routes = [
   <Route key="add-edit-skill" path="/add-edit-skill" component={AddEditSkill} />,
   <Route key="status" path="/status" component={Status} />,
   <Route key="add-edit-status" path="/add-edit-status" component={AddEditStatus} />,
-
   <Route key="employer-dashboard" path="/employer-dashboard" component={EmployerDashboard}/>,
   <Route key="created-jobs" path='/created-jobs' component={CreatedJobs}/>,
   <Route key="created-job-detail" path="/created-job" component={CreatedJobDetails} />,
-
-
+  <Route key="applied-applications" path="/applied-applications" component={AppliedApplications} />
 ];
