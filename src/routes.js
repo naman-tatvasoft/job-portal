@@ -18,6 +18,7 @@ import EmployerDashboard from './components/Employer/EmployerDashboard.js';
 import CreatedJobs from './components/Job/CreatedJobs.js';
 import CreatedJobDetails from './components/Job/CreatedJobDetails.js';
 import AppliedApplications from './components/Application/AppliedApplications.js';
+import AppliedApplicationDetails from './components/Application/AppliedApplicationDetails.js';
 
 export const routes = [
   <Route key="login" path="/" component={Login} exact />,
@@ -38,5 +39,7 @@ export const routes = [
   <Route key="employer-dashboard" path="/employer-dashboard" component={EmployerDashboard}/>,
   <Route key="created-jobs" path='/created-jobs' component={CreatedJobs}/>,
   <Route key="created-job-detail" path="/created-job" component={CreatedJobDetails} />,
-  <Route key="applied-applications" path="/applied-applications" component={AppliedApplications} />
+  <Route key="applied-applications" path="/applied-applications" component={AppliedApplications} />,
+  <Route key="applied-application-detail" path="/applied-application" component={AppliedApplicationDetails} />
+
 ];

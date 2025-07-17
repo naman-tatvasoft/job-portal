@@ -163,6 +163,14 @@ export async function getApplicationData(id) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
+export async function updateApplicationStatus(id, statusId) {
+  return fetch(`${API_BASE}/application/${id}/change-status/${statusId}`, {
+    method: 'PUT',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+
 
 // category
 export async function getCategoriesData() {

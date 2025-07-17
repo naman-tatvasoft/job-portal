@@ -42,7 +42,7 @@ export default class CreatedJobDetails extends Component {
                                     <p><i className="bi bi-briefcase-fill text-primary me-2"></i><strong>Experience:</strong> {job.experienceRequired} years</p>
                                     <p><i className="bi bi-calendar-event text-primary me-2"></i><strong>Open From:</strong> {new Date(job.openFrom).toLocaleDateString()}</p>
                                 </div>
-                                <div className="col-md-12 mt-5">
+                                <div className="col-md-12 mt-3">
                                     <p><i className="bi bi-people-fill text-primary me-2"></i><strong>Vacancies:</strong> {job.vacancies}</p>
                                     <p><i className="bi bi-tags-fill text-primary me-2"></i><strong>Category:</strong> <span className="badge bg-secondary">{job.categoryName}</span></p>
                                     <p><i className="bi bi-toggle-on text-primary me-2"></i><strong>Status:</strong>

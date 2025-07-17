@@ -1,6 +1,6 @@
 import { Component } from 'inferno';
 import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
-import { getApplicationsData, getStatusData } from '../../services/ApiService.js';
+import { getApplicationsData, getStatusData, updateApplicationStatus } from '../../services/ApiService.js';
 import debounce from 'lodash/debounce.js';
 
 export default class AppliedApplications extends Component {
@@ -12,7 +12,10 @@ export default class AppliedApplications extends Component {
             search: '',
             status: '',
             pageNumber: 1,
-            pageSize: 2
+            pageSize: 2,
+            changeStatusId: 0,
+            changeStatusApplicationId: 0,
+            showModal: false
         };
         this.debouncedFetchApplications = debounce(this.fetchApplications.bind(this), 500);
     }
@@ -46,18 +49,40 @@ export default class AppliedApplications extends Component {
         });
     };
 
+    handleStatusChange = (e) => {
+        this.setState({ changeStatusId: parseInt(e.target.value) });
+    };
+
     handlePageSizeChange = (e) => {
         this.setState({ pageSize: parseInt(e.target.value), pageNumber: 1 }, () => this.fetchApplications());
     };
 
     handleRedirects = (id) => {
-        window.location.href = `/application?applicationId=${id}`;
+        window.location.href = `/applied-application?applicationId=${id}`;
     };
 
     changePage = (direction) => {
         const newPage = this.state.pageNumber + direction;
         if (newPage < 1) return;
         this.setState({ pageNumber: newPage }, () => this.fetchApplications());
+    };
+
+    handleShowModal = (id, statusId) => {
+        this.setState({ showModal: true, changeStatusApplicationId: id, changeStatusId: statusId });
+    };
+
+    handleCloseModal = () => {
+        this.setState({ showModal: false, changeStatusApplicationId: 0, changeStatusId: 0 });
+    };
+
+    handleUpdateStatus = async () => {
+        const { changeStatusApplicationId, changeStatusId } = this.state;
+        if (changeStatusApplicationId && changeStatusId) {
+            const isUpdated = await updateApplicationStatus(changeStatusApplicationId, changeStatusId)
+            if(isUpdated){
+                this.setState({ showModal: false, changeStatusApplicationId: 0, changeStatusId: 0 }, () => this.fetchApplications());
+            }
+        }
     };
 
     render() {
@@ -105,13 +130,11 @@ export default class AppliedApplications extends Component {
                         {applications.length > 0 ? (
                             applications.map((application) => (
                                 <div className="col-md-6 mb-4" key={application.id}>
-                                    <div className="card h-100 shadow-sm border-0"
-                                         style={{ cursor: 'pointer' }}
-                                            onClick={() => this.handleRedirects(application.id)}>
+                                    <div className="card h-100 shadow-sm border-0">
                                         <div className="card-body">
-                                            <div className="d-flex justify-content-between">
+                                            <div className="d-flex justify-content-between" style={{ cursor: 'pointer' }} onClick={() => this.handleRedirects(application.id)}>
                                                 <h5 className="text-primary fw-bold mb-2">{application.candidateName}</h5>
-                                                <span className="badge bg-secondary">{application.status}</span>
+                                                <span className="badge bg-secondary pt-2">{application.status}</span>
                                             </div>
                                             <p className="mb-1"><i className="bi bi-envelope"></i> {application.candidateEmail}</p>
                                             <p className="mb-1"><i className="bi bi-briefcase-fill"></i> <strong>{application.jobTitle}</strong> @ {application.companyName}</p>
@@ -121,25 +144,16 @@ export default class AppliedApplications extends Component {
                                             {application.noteForEmployer && (
                                                 <p className="text-muted fst-italic small mb-2">Note: {application.noteForEmployer}</p>
                                             )}
-                                            <div className="d-flex flex-wrap gap-2">
-                                                <a
-                                                    className="btn btn-outline-primary btn-sm"
-                                                    href={`/files/${application.resumeName}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <i className="bi bi-file-earmark-person"></i> View Resume
-                                                </a>
-                                                <a
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    href={`/files/${application.coverLetterName}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <i className="bi bi-file-earmark-text"></i> View Cover Letter
-                                                </a>
+                                            <div className="d-flex gap-2 justify-content-end align-items-center mt-2">
+                                                <button className="btn btn-primary btn-sm" onClick={() => this.handleRedirects(application.id)}>
+                                                    View
+                                                </button>
+                                                <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleShowModal(application.id, application.statusId)}>
+                                                    Change Status
+                                                </button>   
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             ))
@@ -169,6 +183,35 @@ export default class AppliedApplications extends Component {
                         </div>
                     </div>
                 </div>
+                {this.state.showModal && (
+                    <div className="custom-modal-backdrop">
+                        <div className="custom-modal">
+                            <div className="custom-modal-header">
+                                <h5>Update Status</h5>
+                                <button onClick={this.handleCloseModal} className="close-btn">×</button>
+                            </div>
+                            <div className="custom-modal-body">
+
+                                <label className="form-label fw-semibold">Status</label>
+                                
+                                <select
+                                    className="form-select py-2"
+                                    name="changeStatusId"
+                                    value={this.state.changeStatusId}
+                                    onChange={this.handleStatusChange}
+                                >
+                                    {statusData.map((stat) => (
+                                        <option key={stat.id} value={stat.id}>{stat.name}</option>
+                                    ))}
+                                </select>
+                                <button className="btn btn-primary mt-2" onClick={() => this.handleUpdateStatus()}>
+                                    Update
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
         );
     }

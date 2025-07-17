@@ -104,13 +104,11 @@ export default class Applications extends Component {
                         {applications.length > 0 ? (
                             applications.map((application) => (
                                 <div className="col-md-6 mb-4" key={application.id}>
-                                    <div className="card h-100 shadow-sm border-0"
-                                         style={{ cursor: 'pointer' }}
-                                            onClick={() => this.handleRedirects(application.id)}>
+                                    <div className="card h-100 shadow-sm border-0">
                                         <div className="card-body">
-                                            <div className="d-flex justify-content-between">
+                                            <div className="d-flex justify-content-between" style={{ cursor: 'pointer' }} onClick={() => this.handleRedirects(application.id)}>
                                                 <h5 className="text-primary fw-bold mb-2">{application.candidateName}</h5>
-                                                <span className="badge bg-secondary">{application.status}</span>
+                                                <span className="badge bg-secondary pt-2">{application.status}</span>
                                             </div>
                                             <p className="mb-1"><i className="bi bi-envelope"></i> {application.candidateEmail}</p>
                                             <p className="mb-1"><i className="bi bi-briefcase-fill"></i> <strong>{application.jobTitle}</strong> @ {application.companyName}</p>
@@ -120,24 +118,6 @@ export default class Applications extends Component {
                                             {application.noteForEmployer && (
                                                 <p className="text-muted fst-italic small mb-2">Note: {application.noteForEmployer}</p>
                                             )}
-                                            <div className="d-flex flex-wrap gap-2">
-                                                <a
-                                                    className="btn btn-outline-primary btn-sm"
-                                                    href={`/files/${application.resumeName}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <i className="bi bi-file-earmark-person"></i> View Resume
-                                                </a>
-                                                <a
-                                                    className="btn btn-outline-secondary btn-sm"
-                                                    href={`/files/${application.coverLetterName}`}
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                >
-                                                    <i className="bi bi-file-earmark-text"></i> View Cover Letter
-                                                </a>
-                                            </div>
                                         </div>
                                     </div>
                                 </div>

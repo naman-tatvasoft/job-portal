@@ -1,8 +1,8 @@
 import { Component } from 'inferno';
-import Sidebar from '../Sidebar/Sidebar.js';
+import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
 import { getApplicationData } from '../../services/ApiService.js';
 
-export default class ApplicationDetail extends Component {
+export default class AppliedApplicationDetails extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -19,7 +19,7 @@ export default class ApplicationDetail extends Component {
 
     handleBack = (e) => {
         e.preventDefault();
-        window.location.href = '/applications';
+        window.location.href = '/applied-applications';
     };
 
     render() {
@@ -27,9 +27,9 @@ export default class ApplicationDetail extends Component {
         const API_BASE = 'http://localhost:5246';
         return (
             <div id="application-detail" className="page-section d-flex">
-                <Sidebar />
+                <EmployerSidebar />
                 <div className="container-fluid p-4 bg-custom">
-                    <h2 className="mb-4">Application Detail</h2>
+                    <h2 className="mb-4">Applied Application Detail</h2>
                     <div className="card shadow-sm border-0 rounded-3">
                         <div className="card-header bg-primary text-white">
                             <h5 className="mb-0">{applicationData.jobTitle || 'Job Title'}</h5>

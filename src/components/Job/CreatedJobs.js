@@ -24,7 +24,8 @@ export default class CreatedJobs extends Component {
                 description: '',
                 categoryId: 0,
                 skillsRequiredList: [],
-                vacancies: 0
+                vacancies: 0,
+                openFrom: '',
             },
             validationError: ''
         };
@@ -106,7 +107,8 @@ export default class CreatedJobs extends Component {
                 description: '',
                 categoryId: 0,
                 skillsRequiredList: [],
-                vacancies: 0
+                vacancies: 0,
+                openFrom: ''
             },
             validationError: ''
         });
@@ -160,7 +162,7 @@ export default class CreatedJobs extends Component {
         const success = await addJobData(this.state.form);
         if (success) {
             this.setState({
-                showModal: false, 
+                showModal: false,
                 form: {
                     id: 0,
                     title: '',
@@ -169,8 +171,9 @@ export default class CreatedJobs extends Component {
                     description: '',
                     categoryId: 0,
                     skillsRequiredList: [],
-                    vacancies: 0
-                }, 
+                    vacancies: 0,
+                    openFrom: ''
+                },
                 validationError: ''
             });
             this.fetchJobs();
@@ -196,7 +199,7 @@ export default class CreatedJobs extends Component {
         const success = await editJobData(jobId, this.state.form);
         if (success) {
             this.setState({
-                showModal: false, 
+                showModal: false,
                 form: {
                     id: 0,
                     title: '',
@@ -205,8 +208,9 @@ export default class CreatedJobs extends Component {
                     description: '',
                     categoryId: 0,
                     skillsRequiredList: [],
-                    vacancies: 0
-                }, 
+                    vacancies: 0,
+                    openFrom: ''
+                },
                 validationError: ''
             });
             this.fetchJobs();
@@ -312,7 +316,6 @@ export default class CreatedJobs extends Component {
                                                     <i className="bi bi-briefcase"></i> {job.experienceRequired || 0} + &nbsp; | &nbsp;
                                                     <i className="bi bi-cash-coin"></i> {job.salaryRange || "Not disclosed"}
                                                 </div>
-                                                <p className="text-muted small">{job.description.slice(0, 100)}...</p>
 
                                                 <div className="mb-2">
                                                     {(job.skills || []).slice(0, 4).map((s, i) => (
@@ -431,6 +434,14 @@ export default class CreatedJobs extends Component {
                                     onInput={this.handleFormChange}
                                 />
 
+                                <label>Open From*</label>
+                                <input
+                                    type="date"
+                                    className="form-control mb-2"
+                                    name="openFrom"
+                                    value={this.state.form.openFrom}
+                                    onInput={this.handleFormChange}
+                                />
 
                                 <label>Skills *</label>
                                 <div className="skills-checkbox-group mb-2">
