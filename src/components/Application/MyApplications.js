@@ -1,9 +1,9 @@
 import { Component } from 'inferno';
-import EmployerSidebar from '../Sidebar/EmployerSidebar.js';
-import { getApplicationsData, getStatusData, updateApplicationStatus } from '../../services/ApiService.js';
+import CandidateSidebar from '../Sidebar/CandidateSidebar.js';
+import { getMyApplicationsData, getStatusData, withdrawApplication } from '../../services/ApiService.js';
 import debounce from 'lodash/debounce.js';
 
-export default class AppliedApplications extends Component {
+export default class MyApplications extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -12,8 +12,7 @@ export default class AppliedApplications extends Component {
             search: '',
             status: '',
             pageNumber: 1,
-            pageSize: 2,
-            changeStatusId: 0,
+            pageSize: 5,
             changeStatusApplicationId: 0,
             showModal: false
         };
@@ -23,11 +22,7 @@ export default class AppliedApplications extends Component {
     async componentWillMount() {
         this.fetchApplications();
         const statusData = await getStatusData();
-        
-        if (statusData && statusData.length > 0) {
-            const filteredStatusData = statusData.filter(stat => stat.name !== 'Withdrawn');
-            this.setState({ statusData: filteredStatusData });
-        } 
+        this.setState({ statusData: statusData });
     }
 
     componentWillUnmount() {
@@ -42,7 +37,8 @@ export default class AppliedApplications extends Component {
             pageNumber,
             pageSize
         };
-        const applicationsData = await getApplicationsData(filters);
+        console.log(filters);
+        const applicationsData = await getMyApplicationsData(filters);
         this.setState({ applications: applicationsData || [] });
     }
 
@@ -61,8 +57,9 @@ export default class AppliedApplications extends Component {
         this.setState({ pageSize: parseInt(e.target.value), pageNumber: 1 }, () => this.fetchApplications());
     };
 
+
     handleRedirects = (id) => {
-        window.location.href = `/applied-application?applicationId=${id}`;
+        window.location.href = `/my-application?applicationId=${id}`;
     };
 
     changePage = (direction) => {
@@ -71,20 +68,21 @@ export default class AppliedApplications extends Component {
         this.setState({ pageNumber: newPage }, () => this.fetchApplications());
     };
 
-    handleShowModal = (id, statusId) => {
-        this.setState({ showModal: true, changeStatusApplicationId: id, changeStatusId: statusId });
+
+    handleShowModal = (id) => {
+        this.setState({ showModal: true, changeStatusApplicationId: id });
     };
 
     handleCloseModal = () => {
-        this.setState({ showModal: false, changeStatusApplicationId: 0, changeStatusId: 0 });
+        this.setState({ showModal: false, changeStatusApplicationId: 0 });
     };
 
     handleUpdateStatus = async () => {
-        const { changeStatusApplicationId, changeStatusId } = this.state;
-        if (changeStatusApplicationId && changeStatusId) {
-            const isUpdated = await updateApplicationStatus(changeStatusApplicationId, changeStatusId)
-            if(isUpdated){
-                this.setState({ showModal: false, changeStatusApplicationId: 0, changeStatusId: 0 }, () => this.fetchApplications());
+        const { changeStatusApplicationId } = this.state;
+        if (changeStatusApplicationId) {
+            const isUpdated = await withdrawApplication(changeStatusApplicationId);
+            if (isUpdated) {
+                this.setState({ showModal: false, changeStatusApplicationId: 0 }, () => this.fetchApplications());
             }
         }
     };
@@ -93,10 +91,9 @@ export default class AppliedApplications extends Component {
         const { applications, search, status, statusData, pageSize, pageNumber } = this.state;
         return (
             <div class="main d-flex">
-                <EmployerSidebar />
+                <CandidateSidebar />
                 <div id="dashboard" className="container-fluid p-4 bg-custom">
-                    <h2 className="mb-4 text-primary">Applied Applications</h2>
-
+                    <h2 className="mb-4 text-primary">My Applications</h2>
                     <div className="mb-4 bg-white border rounded-3 shadow-sm p-3 px-md-4">
                         <h5 className="text-primary mb-3">Filter Applications</h5>
                         <div className="row align-items-end">
@@ -129,7 +126,6 @@ export default class AppliedApplications extends Component {
                             </div>
                         </div>
                     </div>
-
                     <div className="row">
                         {applications.length > 0 ? (
                             applications.map((application) => (
@@ -137,11 +133,10 @@ export default class AppliedApplications extends Component {
                                     <div className="card h-100 shadow-sm border-0">
                                         <div className="card-body">
                                             <div className="d-flex justify-content-between" style={{ cursor: 'pointer' }} onClick={() => this.handleRedirects(application.id)}>
-                                                <h5 className="text-primary fw-bold mb-2">{application.candidateName}</h5>
+                                                <p className="mb-1"><i className="bi bi-briefcase-fill"></i> <strong>{application.jobTitle}</strong> @ {application.companyName}</p>
+
                                                 <span className="badge bg-secondary pt-2">{application.status}</span>
                                             </div>
-                                            <p className="mb-1"><i className="bi bi-envelope"></i> {application.candidateEmail}</p>
-                                            <p className="mb-1"><i className="bi bi-briefcase-fill"></i> <strong>{application.jobTitle}</strong> @ {application.companyName}</p>
                                             <p className="mb-1"><i className="bi bi-geo-alt-fill"></i> {application.jobLocation}</p>
                                             <p className="mb-1"><i className="bi bi-clock-history"></i> Applied on: {new Date(application.applicationDate).toLocaleDateString()}</p>
                                             <p className="mb-2"><i className="bi bi-person-workspace"></i> {application.experience} yrs experience</p>
@@ -152,9 +147,12 @@ export default class AppliedApplications extends Component {
                                                 <button className="btn btn-primary btn-sm" onClick={() => this.handleRedirects(application.id)}>
                                                     View
                                                 </button>
-                                                <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleShowModal(application.id, application.statusId)}>
-                                                    Change Status
-                                                </button>   
+                                                {application.status == 'Withdrawn' ? null :
+                                                    <button className="btn btn-outline-primary btn-sm" onClick={() => this.handleShowModal(application.id, application.statusId)}>
+                                                        Withdraw application
+                                                    </button>
+
+                                                }
                                             </div>
                                         </div>
 
@@ -191,27 +189,16 @@ export default class AppliedApplications extends Component {
                     <div className="custom-modal-backdrop">
                         <div className="custom-modal">
                             <div className="custom-modal-header">
-                                <h5>Update Status</h5>
+                                <h5>Are you sure you want to Withdraw?</h5>
                                 <button onClick={this.handleCloseModal} className="close-btn">×</button>
                             </div>
-                            <div className="custom-modal-body">
-
-                                <label className="form-label fw-semibold">Status</label>
-                                
-                                <select
-                                    className="form-select py-2"
-                                    name="changeStatusId"
-                                    value={this.state.changeStatusId}
-                                    onChange={this.handleStatusChange}
-                                >
-                                    {statusData.map((stat) => (
-                                        <option key={stat.id} value={stat.id}>{stat.name}</option>
-                                    ))}
-                                </select>
+                            <div className="custom-modal-body d-flex justify-content-center gap-2">
                                 <button className="btn btn-primary mt-2" onClick={() => this.handleUpdateStatus()}>
-                                    Update
+                                    Yes
                                 </button>
-
+                                <button className="btn btn-danger mt-2" onClick={this.handleCloseModal}>
+                                    No
+                                </button>
                             </div>
                         </div>
                     </div>

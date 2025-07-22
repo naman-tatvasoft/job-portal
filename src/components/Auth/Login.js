@@ -31,7 +31,7 @@ export default class Login extends Component {
         if (role == 'Employer') {
           window.location.href = '/employer-dashboard';
         } else if (role == 'Candidate') {
-          window.location.href = '/candidate-dashboard';
+          window.location.href = '/apply-jobs';
         } else if (role == 'Admin') {
           window.location.href = '/admin-dashboard';
         }
@@ -83,7 +83,7 @@ export default class Login extends Component {
       if (role == 'Employer') {
         window.location.href = '/employer-dashboard';
       } else if (role == 'Candidate') {
-        window.location.href = '/candidate-dashboard';
+        window.location.href = '/apply-jobs';
       } else if (role == 'Admin') {
         console.log("Admin role detected, redirecting to admin dashboard");
         window.location.href = '/admin-dashboard';

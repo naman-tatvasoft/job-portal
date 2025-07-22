@@ -170,6 +170,36 @@ export async function updateApplicationStatus(id, statusId) {
   }).then(_verifyResponse).catch(_handleError);
 }
 
+export async function applyApplication(jobData) {
+  return fetch(`${API_BASE}/application/`, {
+    method: 'POST',
+    headers: _authHeaders(true),
+    body: jobData,
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function getMyApplicationsData(filters = {}) {
+  const params = new URLSearchParams();
+
+  Object.entries(filters).forEach(([key, value]) => {
+    if (value !== "" && value !== 0 && value != null) {
+      params.append(key, value);
+    }
+  });
+
+  return fetch(`${API_BASE}/applications-by-candidate?${params.toString()}`, {
+    method: 'GET',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
+export async function withdrawApplication(id) {
+  return fetch(`${API_BASE}/application/withdraw-application/${id}`, {
+    method: 'PUT',
+    headers: _authHeaders()
+  }).then(_verifyResponse).catch(_handleError);
+}
+
 
 
 // category
@@ -290,11 +320,13 @@ export async function deleteStatusData(id) {
 
 
 //token
-function _authHeaders() {
+function _authHeaders(isFormData = false) {
   const token = localStorage.getItem('access-token');
-  const headers = {
-    'Content-Type': 'application/json',
-  };
+  const headers = {};
+
+   if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   const refreshToken = document.cookie.split('; ').find(row => row.startsWith('refresh-token='));
   if (refreshToken) {

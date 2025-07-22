@@ -19,6 +19,10 @@ import CreatedJobs from './components/Job/CreatedJobs.js';
 import CreatedJobDetails from './components/Job/CreatedJobDetails.js';
 import AppliedApplications from './components/Application/AppliedApplications.js';
 import AppliedApplicationDetails from './components/Application/AppliedApplicationDetails.js';
+import ApplyJob from './components/Job/ApplyJob.js';
+import ApplyJobDetails from './components/Job/ApplyJobDetails.js';
+import MyApplications from './components/Application/MyApplications.js';
+import MyApplicationDetails from './components/Application/MyApplicationDetails.js';
 
 export const routes = [
   <Route key="login" path="/" component={Login} exact />,
@@ -40,6 +44,10 @@ export const routes = [
   <Route key="created-jobs" path='/created-jobs' component={CreatedJobs}/>,
   <Route key="created-job-detail" path="/created-job" component={CreatedJobDetails} />,
   <Route key="applied-applications" path="/applied-applications" component={AppliedApplications} />,
-  <Route key="applied-application-detail" path="/applied-application" component={AppliedApplicationDetails} />
+  <Route key="applied-application-detail" path="/applied-application" component={AppliedApplicationDetails} />,
+  <Route key="apply-jobs" path='/apply-jobs' component={ApplyJob} />,
+  <Route key="apply-job-details" path="/apply-job" component={ApplyJobDetails} />,
+  <Route key="my-applications" path="/my-applications" component={MyApplications} />,
+  <Route key="my-application-detail" path="/my-application" component={MyApplicationDetails} />,
 
 ];
